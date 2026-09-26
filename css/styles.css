@@ -172,6 +172,30 @@ a { color: var(--sage-deep); }
   margin: 0 auto;
 }
 
+.hero__photo-wrap {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1.75rem;
+}
+
+.hero__photo {
+  width: 220px;
+  height: 275px;
+  object-fit: cover;
+  border-radius: 999px 999px 28px 28px;
+  border: 6px solid rgba(255, 255, 255, 0.85);
+  box-shadow: 0 18px 40px rgba(90, 74, 68, 0.18);
+  background: var(--tint);
+}
+
+@media (min-width: 1024px) {
+  .hero__photo { width: 260px; height: 325px; }
+}
+
+@media print {
+  .hero__photo { width: 2in; height: 2.5in; box-shadow: none; }
+}
+
 .hero__eyebrow {
   font-size: 0.9375rem;
   letter-spacing: 0.02em;

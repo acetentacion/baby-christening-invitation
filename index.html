@@ -3,14 +3,15 @@
 <!--
   ============================================================================
   EDIT THE EVENT DETAILS HERE
-  ----------------------------------------------------------------------------
-  Baby's name .............. <h1> and <title> and the hero below
+  ============================================================================
+  Baby photo ............... images/baby.jpg (drop your photo there)
+  Baby's name .............. h1, title, meta tags, footer below
   Date ..................... "24 October 2026" (hero, ceremony card, footer)
   Ceremony time ............ "8:00 AM" (ceremony card)
   Ceremony venue ........... "Fatima Parish Church" (ceremony card, maps link)
   Reception venue .......... "Camp Wagi, Masao, Butuan City" (reception card)
   RSVP deadline ............ text here, AND RSVP_DEADLINE in js/main.js
-  Parents / hosts .......... the <!-- EDIT --> line inside the hero
+  Parents / hosts .......... the "EDIT" line inside the hero
   ============================================================================
 -->
 <head>
@@ -55,6 +56,16 @@
     </div>
 
     <div class="hero__inner">
+      <div class="hero__photo-wrap" data-photo>
+        <img class="hero__photo"
+             src="/images/baby.jpg"
+             alt="Maeygia Eikana A. Pojadas"
+             width="220"
+             height="275"
+             decoding="async"
+             fetchpriority="high">
+      </div>
+
       <p class="hero__eyebrow">Together with our families, we joyfully announce the christening of</p>
       <h1 class="hero__name">Maeygia<span class="hero__name-break"> </span>Eikana A. Pojadas</h1>
       <!-- EDIT: replace this line with the parents' / godparents' names -->

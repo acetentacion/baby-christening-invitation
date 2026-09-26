@@ -19,7 +19,19 @@
     initForm();
     initStickyRsvp();
     initReveal();
+    initPhoto();
   });
+
+  /* -------------------------------------------------------------- photo --- */
+
+  function initPhoto() {
+    var wrap = document.querySelector('[data-photo]');
+    if (!wrap) { return; }
+    var img = wrap.querySelector('img');
+    if (!img) { wrap.remove(); return; }
+    // No photo supplied yet: drop the frame instead of showing a broken image.
+    img.addEventListener('error', function () { wrap.hidden = true; });
+  }
 
   /* ------------------------------------------------------- form + gate --- */
 
