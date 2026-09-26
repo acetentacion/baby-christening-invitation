@@ -1,0 +1,23 @@
+[build]
+  publish = "."
+  command = ""
+
+[[headers]]
+  for = "/invite.ics"
+  [headers.values]
+    Content-Type = "text/calendar; charset=utf-8"
+
+[[headers]]
+  for = "/css/*"
+  [headers.values]
+    Cache-Control = "public, max-age=604800"
+
+[[headers]]
+  for = "/js/*"
+  [headers.values]
+    Cache-Control = "public, max-age=604800"
+
+[[redirects]]
+  from = "/calendar"
+  to = "/invite.ics"
+  status = 200
