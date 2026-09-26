@@ -175,25 +175,36 @@ a { color: var(--sage-deep); }
 .hero__photo-wrap {
   display: flex;
   justify-content: center;
-  margin-bottom: 1.75rem;
+  margin-bottom: clamp(1.25rem, 3vw, 1.9rem);
 }
 
 .hero__photo {
-  width: 220px;
-  height: 275px;
+  --photo-size: clamp(9.5rem, 42vw, 12.5rem);
+  width: var(--photo-size);
+  height: var(--photo-size);
   object-fit: cover;
-  border-radius: 999px 999px 28px 28px;
-  border: 6px solid rgba(255, 255, 255, 0.85);
-  box-shadow: 0 18px 40px rgba(90, 74, 68, 0.18);
+  border-radius: 50%;
   background: var(--tint);
+  box-shadow:
+    0 0 0 4px var(--bg),
+    0 0 0 5.5px rgba(201, 169, 106, 0.55),
+    0 16px 34px -16px rgba(58, 51, 48, 0.5);
 }
 
-@media (min-width: 1024px) {
-  .hero__photo { width: 260px; height: 325px; }
+@media (prefers-reduced-motion: no-preference) {
+  .hero__photo { animation: photo-in 0.9s cubic-bezier(0.2, 0.7, 0.3, 1) both; }
+}
+
+@keyframes photo-in {
+  from { opacity: 0; transform: translateY(14px) scale(0.94); }
+  to   { opacity: 1; transform: none; }
 }
 
 @media print {
-  .hero__photo { width: 2in; height: 2.5in; box-shadow: none; }
+  .hero__photo {
+    --photo-size: 1.6in;
+    box-shadow: 0 0 0 3px #999;
+  }
 }
 
 .hero__eyebrow {
@@ -265,9 +276,76 @@ a { color: var(--sage-deep); }
   width: 60px;
   color: var(--sage-deep);
   opacity: 0.35;
+  transform-origin: 50% 100%;
 }
 .sprig--left { left: 4%; }
 .sprig--right { right: 4%; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .sprig {
+    animation: sway 7s ease-in-out infinite alternate;
+  }
+  .sprig--right { animation-duration: 8.5s; animation-delay: -3s; }
+}
+
+@keyframes sway {
+  from { transform: rotate(-3.5deg); }
+  to   { transform: rotate(3.5deg); }
+}
+
+/* ------------------------------------------------------- Ambient petals --- */
+/* A fixed, non-interactive layer of drifting petals over the whole page.
+   Position, timing and drift are set per petal with inline custom properties. */
+
+.petals {
+  position: fixed;
+  inset: 0;
+  z-index: 15;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.petal {
+  position: absolute;
+  top: 0;
+  left: var(--x, 50%);
+  width: var(--size, 13px);
+  height: calc(var(--size, 13px) * 1.35);
+  margin-top: -6vh;
+  border-radius: 60% 0 60% 0;
+  background: rgba(var(--tint-rgb, 246, 217, 214), 0.85);
+  box-shadow: 0 1px 2px rgba(58, 51, 48, 0.08);
+  will-change: transform, opacity;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .petal {
+    animation: petal-fall var(--dur, 26s) linear var(--delay, 0s) infinite;
+  }
+}
+
+/* Vertical travel is spaced in proportion to the keyframe percentages so the
+   fall keeps a constant speed; only the horizontal drift and spin vary. */
+@keyframes petal-fall {
+  0% {
+    transform: translate3d(0, -8vh, 0) rotate(0deg);
+    opacity: 0;
+  }
+  10% { opacity: 0.9; }
+  30% { transform: translate3d(calc(var(--drift, 40px) * 0.7), 27.4vh, 0) rotate(160deg); }
+  55% { transform: translate3d(calc(var(--drift, 40px) * -0.6), 56.9vh, 0) rotate(330deg); }
+  80% { transform: translate3d(calc(var(--drift, 40px) * 0.8), 86.4vh, 0) rotate(500deg); }
+  92% { opacity: 0.75; }
+  100% {
+    transform: translate3d(calc(var(--drift, 40px) * -0.2), 110vh, 0) rotate(680deg);
+    opacity: 0;
+  }
+}
+
+/* Fewer petals on small screens so text stays readable. */
+@media (max-width: 640px) {
+  .petal:nth-child(n + 7) { display: none; }
+}
 
 /* -------------------------------------------------------------- Section --- */
 
@@ -578,7 +656,7 @@ a { color: var(--sage-deep); }
 @media print {
   :root { --bg: #fff; --tint: #fff; }
   .hero { background: none; padding-top: 1.5rem; }
-  .hero__art, .hero__wave, .footer__wave, .sticky-rsvp,
+  .hero__art, .hero__wave, .footer__wave, .sticky-rsvp, .petals,
   .form-wrap, .calendar-cta, .skip-link { display: none !important; }
   body { color: #000; }
   .card { box-shadow: none; border: 1px solid #999; break-inside: avoid; }
