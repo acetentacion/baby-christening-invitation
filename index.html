@@ -4,7 +4,7 @@
   ============================================================================
   EDIT THE EVENT DETAILS HERE
   ============================================================================
-  Baby photo ............... images/baby.jpg (drop your photo there)
+  Baby photos .............. images/baby.png and images/baby1.png
   Baby's name .............. h1, title, meta tags, footer below
   Date ..................... "24 October 2026" (hero, ceremony card, footer)
   Ceremony time ............ "8:00 AM" (ceremony card)
@@ -59,7 +59,7 @@
     <div class="hero__inner">
       <div class="hero__photo-wrap" data-photo>
         <img class="hero__photo"
-             src="/images/baby.jpg"
+             src="/images/baby.png"
              alt="Maeygia Eikana A. Pojadas"
              width="200"
              height="200"
@@ -248,14 +248,18 @@
   <div class="envelope" id="envelope" role="dialog" aria-modal="true"
        aria-label="An invitation from Maeygia" hidden>
     <div class="envelope__shell">
-      <button class="btn btn--primary envelope__open" id="envelope-open" type="button">Open invitation</button>
+      <button class="envelope__open" id="envelope-open" type="button" aria-label="Open invitation"></button>
       <div class="envelope__back" aria-hidden="true"></div>
       <div class="envelope__flap envelope__flap--top" aria-hidden="true"></div>
       <div class="envelope__flap envelope__flap--left" aria-hidden="true"></div>
       <div class="envelope__flap envelope__flap--right" aria-hidden="true"></div>
       <div class="envelope__card">
-        <img class="card__photo" src="/images/baby.jpg"
-             alt="Maeygia Eikana A. Pojadas" width="200" height="200" decoding="async">
+        <div class="card__portrait" role="img" aria-label="Maeygia Eikana A. Pojadas smiling">
+          <img class="card__photo card__photo--first" src="/images/baby.png"
+               alt="" width="200" height="200" decoding="async">
+          <img class="card__photo card__photo--second" src="/images/baby1.png"
+               alt="" width="200" height="200" decoding="async">
+        </div>
         <p class="card__eyebrow">A little invitation, just for you</p>
         <h2 class="card__message" id="card-message"
             aria-label="Hi, I am Maeygia. Can you be my ninang/ninong?">

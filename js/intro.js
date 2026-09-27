@@ -151,6 +151,18 @@
     window.clearTimeout(safetyTimer);
     envelope.setAttribute('aria-labelledby', 'card-message');
     card.inert = false;
+    // Wait for both portraits so slow connections never fade to an empty frame.
+    var portraits = card.querySelectorAll('.card__photo');
+    function animatePortrait() {
+      if (finished || opening) { return; }
+      if (Array.prototype.every.call(portraits, function (photo) {
+        return photo.complete && photo.naturalWidth > 0;
+      })) { envelope.classList.add('is-portrait-ready'); }
+    }
+    Array.prototype.forEach.call(portraits, function (photo) {
+      photo.addEventListener('load', animatePortrait, { once: true });
+    });
+    animatePortrait();
     yes.focus({ preventScroll: true });
     if (!motion.matches) {
       var count = 0;
