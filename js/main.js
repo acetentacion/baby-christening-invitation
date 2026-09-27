@@ -10,6 +10,9 @@
      The form closes automatically once this moment has passed. */
   var RSVP_DEADLINE = new Date('2026-10-24T00:00:00+08:00');
 
+  var revealObserver = null;
+  var revealItems = null;
+
   var onReady = function (fn) {
     if (document.readyState !== 'loading') { fn(); }
     else { document.addEventListener('DOMContentLoaded', fn); }
@@ -209,6 +212,7 @@
 
   function initReveal() {
     var items = document.querySelectorAll('[data-reveal]');
+    revealItems = items;
     if (!items.length) { return; }
 
     if (!('IntersectionObserver' in window) ||
@@ -217,16 +221,29 @@
       return;
     }
 
-    var observer = new IntersectionObserver(function (entries) {
+    revealObserver = new IntersectionObserver(function (entries) {
       entries.forEach(function (entry) {
         if (entry.isIntersecting) {
           entry.target.classList.add('is-revealed');
-          observer.unobserve(entry.target);
+          revealObserver.unobserve(entry.target);
         }
       });
     }, { rootMargin: '0px 0px -12% 0px', threshold: 0.1 });
 
-    Array.prototype.forEach.call(items, function (item) { observer.observe(item); });
+    observeReveals();
+
+    // js/intro.js keeps the cards out of sight until the spoken line has ended;
+    // re-arm the observer once they are actually on screen.
+    document.addEventListener('christening:intro-complete', observeReveals);
+  }
+
+  function observeReveals() {
+    if (!revealObserver) { return; }
+    Array.prototype.forEach.call(revealItems, function (item) {
+      if (item.classList.contains('is-revealed')) { return; }
+      revealObserver.unobserve(item);
+      revealObserver.observe(item);
+    });
   }
 
   function revealAll(items) {

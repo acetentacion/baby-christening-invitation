@@ -30,6 +30,14 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600&amp;family=Nunito:wght@400;600;700&amp;display=swap">
   <link rel="stylesheet" href="/css/styles.css">
+
+  <!-- No JavaScript at all: drop the intro curtain instead of showing a dark page. -->
+  <noscript>
+    <style>
+      .intro-overlay { display: none !important; }
+      .intro-stage { visibility: visible !important; opacity: 1 !important; }
+    </style>
+  </noscript>
 </head>
 
 <body>
@@ -85,147 +93,149 @@
     </svg>
   </header>
 
-  <main>
-    <section class="section" id="details" aria-labelledby="details-heading">
-      <h2 class="section__title" id="details-heading">The Details</h2>
-      <p class="section__lede">Two happy occasions, one beautiful day.</p>
-
-      <div class="cards">
-        <article class="card" data-reveal>
-          <p class="card__eyebrow">Ceremony</p>
-          <h3 class="card__title">Christening</h3>
-          <dl class="card__meta">
-            <div class="card__row">
-              <dt>When</dt>
-              <dd>Saturday, 24 October 2026 &middot; 8:00 AM</dd>
-            </div>
-            <div class="card__row">
-              <dt>Where</dt>
-              <dd>Fatima Parish Church</dd>
-            </div>
-          </dl>
-          <a class="btn btn--ghost"
-             href="https://www.google.com/maps/search/?api=1&amp;query=Fatima+Parish+Church+Butuan+City"
-             target="_blank" rel="noopener noreferrer">
-            Open in Maps
-            <span class="btn__icon" aria-hidden="true">&nearr;</span>
+  <div class="intro-stage" id="intro-stage">
+    <main>
+      <section class="section" id="details" aria-labelledby="details-heading">
+        <h2 class="section__title" id="details-heading">The Details</h2>
+        <p class="section__lede">Two happy occasions, one beautiful day.</p>
+  
+        <div class="cards">
+          <article class="card" data-reveal>
+            <p class="card__eyebrow">Ceremony</p>
+            <h3 class="card__title">Christening</h3>
+            <dl class="card__meta">
+              <div class="card__row">
+                <dt>When</dt>
+                <dd>Saturday, 24 October 2026 &middot; 8:00 AM</dd>
+              </div>
+              <div class="card__row">
+                <dt>Where</dt>
+                <dd>Fatima Parish Church</dd>
+              </div>
+            </dl>
+            <a class="btn btn--ghost"
+               href="https://www.google.com/maps/search/?api=1&amp;query=Fatima+Parish+Church+Butuan+City"
+               target="_blank" rel="noopener noreferrer">
+              Open in Maps
+              <span class="btn__icon" aria-hidden="true">&nearr;</span>
+            </a>
+          </article>
+  
+          <article class="card" data-reveal>
+            <p class="card__eyebrow">Reception</p>
+            <h3 class="card__title">Merry Meal</h3>
+            <dl class="card__meta">
+              <div class="card__row">
+                <dt>When</dt>
+                <dd>Saturday, 24 October 2026 &middot; after the ceremony</dd>
+              </div>
+              <div class="card__row">
+                <dt>Where</dt>
+                <dd>Camp Wagi, Masao, Butuan City</dd>
+              </div>
+            </dl>
+            <a class="btn btn--ghost"
+               href="https://www.google.com/maps/search/?api=1&amp;query=Camp+Wagi+Masao+Butuan+City"
+               target="_blank" rel="noopener noreferrer">
+              Open in Maps
+              <span class="btn__icon" aria-hidden="true">&nearr;</span>
+            </a>
+          </article>
+        </div>
+  
+        <p class="calendar-cta">
+          <a class="btn btn--soft" href="/invite.ics" download="maeygia-christening.ics">
+            <span class="btn__icon" aria-hidden="true">&#128197;</span>
+            Add to my calendar
           </a>
-        </article>
-
-        <article class="card" data-reveal>
-          <p class="card__eyebrow">Reception</p>
-          <h3 class="card__title">Merry Meal</h3>
-          <dl class="card__meta">
-            <div class="card__row">
-              <dt>When</dt>
-              <dd>Saturday, 24 October 2026 &middot; after the ceremony</dd>
+        </p>
+      </section>
+  
+      <section class="section section--tint" id="rsvp" aria-labelledby="rsvp-heading">
+        <h2 class="section__title" id="rsvp-heading">Kindly RSVP</h2>
+        <p class="section__lede">
+          Please reply by <strong>Friday, 23 October 2026</strong> so we can plan for everyone.
+        </p>
+  
+        <div class="form-wrap">
+          <form name="christening-rsvp"
+                id="rsvp-form"
+                method="POST"
+                action="/success.html"
+                data-netlify="true"
+                netlify-honeypot="bot-field"
+                novalidate>
+            <input type="hidden" name="form-name" value="christening-rsvp">
+  
+            <p class="honeypot">
+              <label>Leave this field empty <input name="bot-field" tabindex="-1" autocomplete="off"></label>
+            </p>
+  
+            <div class="field">
+              <label class="field__label" for="rsvp-name">Guest name(s)</label>
+              <input class="field__input"
+                     id="rsvp-name"
+                     name="guest-name"
+                     type="text"
+                     autocomplete="name"
+                     maxlength="80"
+                     required
+                     placeholder="e.g. Maria &amp; Juan Dela Cruz">
+              <p class="field__error" data-error-for="rsvp-name" hidden>Please tell us your name.</p>
             </div>
-            <div class="card__row">
-              <dt>Where</dt>
-              <dd>Camp Wagi, Masao, Butuan City</dd>
-            </div>
-          </dl>
-          <a class="btn btn--ghost"
-             href="https://www.google.com/maps/search/?api=1&amp;query=Camp+Wagi+Masao+Butuan+City"
-             target="_blank" rel="noopener noreferrer">
-            Open in Maps
-            <span class="btn__icon" aria-hidden="true">&nearr;</span>
-          </a>
-        </article>
-      </div>
-
-      <p class="calendar-cta">
-        <a class="btn btn--soft" href="/invite.ics" download="maeygia-christening.ics">
-          <span class="btn__icon" aria-hidden="true">&#128197;</span>
-          Add to my calendar
-        </a>
-      </p>
-    </section>
-
-    <section class="section section--tint" id="rsvp" aria-labelledby="rsvp-heading">
-      <h2 class="section__title" id="rsvp-heading">Kindly RSVP</h2>
-      <p class="section__lede">
-        Please reply by <strong>Friday, 23 October 2026</strong> so we can plan for everyone.
-      </p>
-
-      <div class="form-wrap">
-        <form name="christening-rsvp"
-              id="rsvp-form"
-              method="POST"
-              action="/success.html"
-              data-netlify="true"
-              netlify-honeypot="bot-field"
-              novalidate>
-          <input type="hidden" name="form-name" value="christening-rsvp">
-
-          <p class="honeypot">
-            <label>Leave this field empty <input name="bot-field" tabindex="-1" autocomplete="off"></label>
-          </p>
-
-          <div class="field">
-            <label class="field__label" for="rsvp-name">Guest name(s)</label>
-            <input class="field__input"
-                   id="rsvp-name"
-                   name="guest-name"
-                   type="text"
-                   autocomplete="name"
-                   maxlength="80"
-                   required
-                   placeholder="e.g. Maria &amp; Juan Dela Cruz">
-            <p class="field__error" data-error-for="rsvp-name" hidden>Please tell us your name.</p>
+  
+            <fieldset class="field field--choice">
+              <legend class="field__label">Will you be joining us?</legend>
+              <div class="choices">
+                <label class="choice">
+                  <input type="radio" name="attending" value="yes" required>
+                  <span class="choice__box">
+                    <span class="choice__mark" aria-hidden="true"></span>
+                    Joyfully accepts
+                  </span>
+                </label>
+                <label class="choice">
+                  <input type="radio" name="attending" value="no" required>
+                  <span class="choice__box">
+                    <span class="choice__mark" aria-hidden="true"></span>
+                    Regretfully declines
+                  </span>
+                </label>
+              </div>
+              <p class="field__error" data-error-for="attending" hidden>Please choose one.</p>
+            </fieldset>
+  
+            <button class="btn btn--primary btn--block" type="submit" id="rsvp-submit">Send my RSVP</button>
+  
+            <p class="form-status" id="form-status" role="status" aria-live="polite"></p>
+          </form>
+  
+          <div class="panel panel--closed" id="rsvp-closed" hidden>
+            <h3 class="panel__title">RSVPs have now closed</h3>
+            <p class="panel__body">
+              The reply deadline was 23 October 2026. Please contact the family directly
+              if you still need to let us know.
+            </p>
           </div>
-
-          <fieldset class="field field--choice">
-            <legend class="field__label">Will you be joining us?</legend>
-            <div class="choices">
-              <label class="choice">
-                <input type="radio" name="attending" value="yes" required>
-                <span class="choice__box">
-                  <span class="choice__mark" aria-hidden="true"></span>
-                  Joyfully accepts
-                </span>
-              </label>
-              <label class="choice">
-                <input type="radio" name="attending" value="no" required>
-                <span class="choice__box">
-                  <span class="choice__mark" aria-hidden="true"></span>
-                  Regretfully declines
-                </span>
-              </label>
-            </div>
-            <p class="field__error" data-error-for="attending" hidden>Please choose one.</p>
-          </fieldset>
-
-          <button class="btn btn--primary btn--block" type="submit" id="rsvp-submit">Send my RSVP</button>
-
-          <p class="form-status" id="form-status" role="status" aria-live="polite"></p>
-        </form>
-
-        <div class="panel panel--closed" id="rsvp-closed" hidden>
-          <h3 class="panel__title">RSVPs have now closed</h3>
-          <p class="panel__body">
-            The reply deadline was 23 October 2026. Please contact the family directly
-            if you still need to let us know.
-          </p>
+  
+          <div class="panel panel--thanks" id="rsvp-thanks" hidden>
+            <span class="panel__mark" aria-hidden="true">&#10003;</span>
+            <h3 class="panel__title">Thank you!</h3>
+            <p class="panel__body" id="thanks-message">Your RSVP has been received.</p>
+          </div>
         </div>
-
-        <div class="panel panel--thanks" id="rsvp-thanks" hidden>
-          <span class="panel__mark" aria-hidden="true">&#10003;</span>
-          <h3 class="panel__title">Thank you!</h3>
-          <p class="panel__body" id="thanks-message">Your RSVP has been received.</p>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <footer class="footer">
-    <svg class="footer__wave" viewBox="0 0 1440 120" preserveAspectRatio="none" role="presentation" aria-hidden="true">
-      <path fill="currentColor" d="M0,72 C240,0 480,120 720,80 C960,40 1200,0 1440,56 L1440,0 L0,0 Z"/>
-    </svg>
-    <p class="footer__name">Maeygia Eikana A. Pojadas</p>
-    <p class="footer__note">RSVPs close 23 October 2026</p>
-    <p class="footer__meta">With love &amp; gratitude</p>
-  </footer>
+      </section>
+    </main>
+  
+    <footer class="footer">
+      <svg class="footer__wave" viewBox="0 0 1440 120" preserveAspectRatio="none" role="presentation" aria-hidden="true">
+        <path fill="currentColor" d="M0,72 C240,0 480,120 720,80 C960,40 1200,0 1440,56 L1440,0 L0,0 Z"/>
+      </svg>
+      <p class="footer__name">Maeygia Eikana A. Pojadas</p>
+      <p class="footer__note">RSVPs close 23 October 2026</p>
+      <p class="footer__meta">With love &amp; gratitude</p>
+    </footer>
+  </div>
 
   <a class="sticky-rsvp" href="#rsvp" data-sticky-rsvp hidden>RSVP</a>
 
@@ -242,6 +252,23 @@
     <span class="petal" style="--x:95%; --size:14px; --dur:25s; --delay:-2s;  --drift:-34px; --tint-rgb:232,214,180"></span>
   </div>
 
+  <div class="intro-overlay is-armed" id="intro-overlay" aria-hidden="true"></div>
+
+  <div class="intro-controls" id="intro-controls" hidden>
+    <button class="intro-begin" id="intro-begin" type="button" hidden>Begin intro</button>
+    <button class="intro-skip" id="intro-skip" type="button" hidden>Skip intro</button>
+  </div>
+
+  <script>
+    /* Safety net: if js/intro.js is blocked or fails to parse, the content below
+       the hero would stay hidden forever. Undo the intro's "curtain" in that case. */
+    window.setTimeout(function () {
+      if (!window.__christeningIntro) {
+        document.documentElement.classList.add('intro-failed');
+      }
+    }, 4000);
+  </script>
+  <script src="/js/intro.js" defer></script>
   <script src="/js/main.js" defer></script>
 </body>
 </html>
