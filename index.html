@@ -7,10 +7,10 @@
   Baby photos .............. images/baby.png and images/baby1.png
   Baby's name .............. h1, title, meta tags, footer below
   Date ..................... "24 October 2026" (hero, ceremony card, footer)
-  Ceremony time ............ "8:00 AM" (ceremony card)
+  Ceremony time ............ "1:00 PM" (ceremony card)
   Ceremony venue ........... "Fatima Parish Church" (ceremony card, maps link)
   Reception venue .......... "Camp Wagi, Masao, Butuan City" (reception card)
-  RSVP deadline ............ text here, AND RSVP_DEADLINE in js/main.js
+  RSVP ..................... open with no reply deadline
   Parents / hosts .......... the "EDIT" line inside the hero
   ============================================================================
 -->
@@ -18,7 +18,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>YOU ARE INVITED &mdash; Maeygia Eikana A. Pojadas &mdash; Christening</title>
-  <meta name="description" content="You are warmly invited to the christening of Maeygia Eikana A. Pojadas on 24 October 2026 at Fatima Parish Church, with the reception at Camp Wagi, Masao, Butuan City. Kindly RSVP by 23 October 2026.">
+  <meta name="description" content="You are warmly invited to the christening of Maeygia Eikana A. Pojadas on 24 October 2026 at Fatima Parish Church, with the reception at Camp Wagi, Masao, Butuan City. Please let us know if you can join us.">
   <meta name="theme-color" content="#fff7fb">
   <meta name="color-scheme" content="light">
 
@@ -36,7 +36,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600&amp;family=Nunito:wght@400;600;700&amp;display=swap">
-  <link rel="stylesheet" href="/css/styles.css?v=20260927-gifts">
+  <link rel="stylesheet" href="/css/styles.css?v=20260927-envelope-effects">
 
 </head>
 
@@ -94,7 +94,7 @@
       <p class="hero__date">
         <span>Saturday, 24 October 2026</span>
         <span class="hero__dot" aria-hidden="true">&middot;</span>
-        <span>8:00 AM</span>
+        <span>1:00 PM</span>
       </p>
 
       <a class="btn btn--primary hero__cta" href="#details">View the details</a>
@@ -118,7 +118,7 @@
             <dl class="card__meta">
               <div class="card__row">
                 <dt>When</dt>
-                <dd>Saturday, 24 October 2026 &middot; 8:00 AM</dd>
+                <dd>Saturday, 24 October 2026 &middot; 1:00 PM</dd>
               </div>
               <div class="card__row">
                 <dt>Where</dt>
@@ -135,7 +135,7 @@
   
           <article class="card" data-reveal>
             <p class="card__eyebrow">Reception</p>
-            <h3 class="card__title">Gamay na Salo-Salo</h3>
+            <h3 class="card__title">Celebration</h3>
             <dl class="card__meta">
               <div class="card__row">
                 <dt>When</dt>
@@ -158,11 +158,13 @@
         <article class="card dress-code" aria-labelledby="dress-code-heading">
           <p class="card__eyebrow">A little color, a lot of joy</p>
           <h3 class="card__title" id="dress-code-heading">Dress Code</h3>
-          <p>Please wear <strong>pink, yellow, or purple</strong> to celebrate with us. Soft pastel shades are welcome!</p>
-          <ul class="dress-code__colors" aria-label="Suggested colors">
+          <p>Wear anything you feel comfortable in, as long as it is a <strong>pastel color</strong>. Any soft pastel shade is welcome!</p>
+          <ul class="dress-code__colors" aria-label="Examples of pastel colors; any pastel shade is welcome">
             <li><span style="background: #f6cfe1" aria-hidden="true"></span>Pink</li>
             <li><span style="background: #f9e8a6" aria-hidden="true"></span>Yellow</li>
             <li><span style="background: #dfcef3" aria-hidden="true"></span>Purple</li>
+            <li><span style="background: #cde6f5" aria-hidden="true"></span>Blue</li>
+            <li><span style="background: #d5ebdb" aria-hidden="true"></span>Green</li>
           </ul>
         </article>
         <article class="card gift-guide" aria-labelledby="gift-heading">
@@ -190,7 +192,7 @@
       <section class="section section--tint" id="rsvp" aria-labelledby="rsvp-heading">
         <h2 class="section__title" id="rsvp-heading">Kindly RSVP</h2>
         <p class="section__lede">
-          Please reply by <strong>Friday, 23 October 2026</strong> so we can plan for everyone.
+          Please let us know if you can join us so we can plan for everyone.
         </p>
   
         <div class="form-wrap">
@@ -246,13 +248,6 @@
             <p class="form-status" id="form-status" role="status" aria-live="polite"></p>
           </form>
   
-          <div class="panel panel--closed" id="rsvp-closed" hidden>
-            <h3 class="panel__title">RSVPs have now closed</h3>
-            <p class="panel__body">
-              The reply deadline was 23 October 2026. Please contact the family directly
-              if you still need to let us know.
-            </p>
-          </div>
   
           <div class="panel panel--thanks" id="rsvp-thanks" hidden>
             <span class="panel__mark" aria-hidden="true">&#10003;</span>
@@ -270,7 +265,7 @@
         <path fill="currentColor" d="M0,72 C240,0 480,120 720,80 C960,40 1200,0 1440,56 L1440,0 L0,0 Z"/>
       </svg>
       <p class="footer__name">Maeygia Eikana A. Pojadas</p>
-      <p class="footer__note">RSVPs close 23 October 2026</p>
+      <p class="footer__note">We look forward to celebrating with you</p>
       <p class="footer__meta">With love &amp; gratitude</p>
     </footer>
   </div>
@@ -292,7 +287,23 @@
 
   <div class="envelope" id="envelope" role="dialog" aria-modal="true"
        aria-label="An invitation from Maeygia" hidden>
+    <div class="envelope__ambience" aria-hidden="true">
+      <span style="--x:12%; --y:20%; --delay:-1s"></span>
+      <span style="--x:85%; --y:15%; --delay:-4s"></span>
+      <span style="--x:22%; --y:65%; --delay:-2s"></span>
+      <span style="--x:90%; --y:72%; --delay:-6s"></span>
+      <span style="--x:45%; --y:10%; --delay:-3s"></span>
+      <span style="--x:65%; --y:85%; --delay:-5s"></span>
+      <span style="--x:8%; --y:88%; --delay:-7s"></span>
+      <span style="--x:75%; --y:40%; --delay:0s"></span>
+    </div>
     <div class="envelope__shell">
+      <div class="envelope__burst" aria-hidden="true">
+        <span style="--angle:0deg"></span><span style="--angle:45deg"></span>
+        <span style="--angle:90deg"></span><span style="--angle:135deg"></span>
+        <span style="--angle:180deg"></span><span style="--angle:225deg"></span>
+        <span style="--angle:270deg"></span><span style="--angle:315deg"></span>
+      </div>
       <button class="envelope__open" id="envelope-open" type="button" aria-label="Open invitation"></button>
       <div class="envelope__back" aria-hidden="true"></div>
       <div class="envelope__flap envelope__flap--top" aria-hidden="true"></div>
@@ -320,6 +331,6 @@
   </div>
 
   <script src="/js/intro.js?v=20260927-recording" defer></script>
-  <script src="/js/main.js?v=20260927-music" defer></script>
+  <script src="/js/main.js?v=20260927-time" defer></script>
 </body>
 </html>

@@ -6,11 +6,11 @@ METHOD:PUBLISH
 BEGIN:VEVENT
 UID:maeygia-christening-20261024@pojadas
 DTSTAMP:20260926T120000Z
-DTSTART;TZID=Asia/Manila:20261024T080000
-DTEND;TZID=Asia/Manila:20261024T100000
+DTSTART;TZID=Asia/Manila:20261024T130000
+DTEND;TZID=Asia/Manila:20261024T150000
 SUMMARY:Maeygia Eikana A. Pojadas - Christening
 LOCATION:Fatima Parish Church\, Butuan City
-DESCRIPTION:Ceremony at 8:00 AM\, Fatima Parish Church\, Butuan City.
+DESCRIPTION:Ceremony at 1:00 PM\, Fatima Parish Church\, Butuan City.
  Reception follows at Camp Wagi\, Masao.
 END:VEVENT
 END:VCALENDAR

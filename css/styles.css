@@ -640,11 +640,68 @@ html.intro-locked body { overflow: hidden; }
 }
 .envelope__shell {
   position: relative;
+  z-index: 1;
   width: min(100%, 28rem);
   margin: auto;
   isolation: isolate;
   perspective: 1000px;
   padding-bottom: 3rem;
+}
+.envelope__ambience {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  background: radial-gradient(ellipse at 50% 55%, #ffffffb3, transparent 60%);
+}
+.envelope__ambience span {
+  position: absolute;
+  left: var(--x);
+  top: var(--y);
+  width: 12px;
+  height: 12px;
+  background: #fff8df;
+  opacity: 0.65;
+  clip-path: polygon(50% 0, 62% 38%, 100% 50%, 62% 62%, 50% 100%, 38% 62%, 0 50%, 38% 38%);
+}
+.envelope__burst {
+  position: absolute;
+  z-index: 9;
+  bottom: 7.75rem;
+  left: 50%;
+  pointer-events: none;
+}
+.envelope__burst span {
+  position: absolute;
+  width: 7px;
+  height: 12px;
+  border-radius: 60% 0 60% 0;
+  background: #d7af69;
+  opacity: 0;
+}
+.envelope__burst span:nth-child(even) { background: #dc92b6; }
+@media (prefers-reduced-motion: no-preference) {
+  .envelope__ambience { animation: invitation-arrival 1.4s ease both; }
+  .envelope__ambience span { animation: invitation-sparkle 8s ease-in-out var(--delay) infinite; }
+  .envelope:not(.is-revealed) .envelope__shell::after { animation: seal-glow 3s ease-in-out 2; }
+  .envelope.is-revealed .envelope__burst span { animation: seal-burst 1.2s ease-out both; }
+}
+@keyframes invitation-arrival {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes invitation-sparkle {
+  0%, 100% { opacity: 0.15; transform: translateY(10px) scale(0.7); }
+  50% { opacity: 0.8; transform: translateY(-18px) scale(1.1); }
+}
+@keyframes seal-glow {
+  0%, 100% { box-shadow: 0 5px 16px #70492c33; }
+  50% { box-shadow: 0 0 0 9px #f7e6bd33, 0 0 32px #f7e6bd99; }
+}
+@keyframes seal-burst {
+  0% { opacity: 0; transform: rotate(var(--angle)) translateY(0) scale(0.4); }
+  15% { opacity: 0.9; }
+  100% { opacity: 0; transform: rotate(var(--angle)) translateY(-140px) rotate(80deg) scale(0.6); }
 }
 .envelope__back {
   position: absolute;

@@ -1,14 +1,11 @@
 /* ==========================================================================
    Baby Christening Invitation — behaviour
-   Three independent pieces: RSVP deadline gate, AJAX submit with a
+   RSVP submission with a
    no-JavaScript fallback, and light scroll affordances.
    ========================================================================== */
 (function () {
   'use strict';
 
-  /* EDIT: the RSVP deadline. Times are Asia/Manila (UTC+8).
-     The form closes automatically once this moment has passed. */
-  var RSVP_DEADLINE = new Date('2026-10-24T00:00:00+08:00');
 
   var revealObserver = null;
   var revealItems = null;
@@ -85,26 +82,14 @@
     var submitBtn = document.getElementById('rsvp-submit');
     var status = document.getElementById('form-status');
     var thanks = document.getElementById('rsvp-thanks');
-    var closed = document.getElementById('rsvp-closed');
     var thanksMessage = document.getElementById('thanks-message');
 
     if (!form) { return; }
 
-    var isClosed = new Date().getTime() >= RSVP_DEADLINE.getTime();
-
-    if (isClosed) {
-      form.hidden = true;
-      if (closed) { closed.hidden = false; }
-    }
 
     form.addEventListener('submit', function (event) {
       event.preventDefault();
       if (submitBtn.disabled) { return; }
-      if (new Date().getTime() >= RSVP_DEADLINE.getTime()) {
-        form.hidden = true;
-        if (closed) { closed.hidden = false; }
-        return;
-      }
 
       if (!validate(form)) { return; }
       if (window.location.protocol === 'file:' || /^(localhost|127\.0\.0\.1|\[::1\])$/.test(window.location.hostname)) {
@@ -245,10 +230,8 @@
   function initStickyRsvp() {
     var sticky = document.querySelector('[data-sticky-rsvp]');
     var form = document.getElementById('rsvp-form');
-    var closed = document.getElementById('rsvp-closed');
     if (!sticky || !form) { return; }
 
-    if (new Date().getTime() >= RSVP_DEADLINE.getTime()) { return; }
     if (!('IntersectionObserver' in window)) { sticky.hidden = false; return; }
 
     var inView = false;
@@ -270,7 +253,6 @@
     }, { rootMargin: '-25% 0px -25% 0px' });
 
     observer.observe(form);
-    if (closed && !closed.hidden) { observer.observe(closed); }
 
     window.addEventListener('scroll', onScroll, { passive: true });
     update();

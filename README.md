@@ -9,9 +9,8 @@ submissions stored in Netlify Forms.
 | | |
 | --- | --- |
 | Baby | Maeygia Eikana A. Pojadas |
-| Ceremony | Saturday, 24 October 2026, 8:00 AM — Fatima Parish Church |
+| Ceremony | Saturday, 24 October 2026, 1:00 PM — Fatima Parish Church |
 | Reception | Camp Wagi, Masao, Butuan City |
-| RSVP deadline | Friday, 23 October 2026 |
 | Timezone | Asia/Manila (UTC+8) |
 
 ## Files
@@ -20,7 +19,7 @@ submissions stored in Netlify Forms.
 index.html          the whole page + the RSVP form
 success.html        thank-you page (target of the no-JavaScript form POST)
 css/styles.css      all styling
-js/main.js          deadline gate, AJAX submit, scroll effects
+js/main.js          AJAX submit, scroll effects
 invite.ics          calendar file served at /invite.ics
 netlify.toml        publish dir + /invite.ics content type
 ```
@@ -39,14 +38,10 @@ page renders. Only the RSVP submission needs Netlify (see below).
 | Ceremony date & time | `index.html` | `.hero__date` and the Ceremony card `<dd>` |
 | Ceremony venue | `index.html` | Ceremony card `<dd>` and its Maps link |
 | Reception venue | `index.html` | Reception card `<dd>` and its Maps link |
-| **RSVP deadline (form closing)** | `js/main.js` | `var RSVP_DEADLINE = new Date('2026-10-24T00:00:00+08:00');` |
-| RSVP deadline (text on the page) | `index.html` | the `<p class="section__lede">` in the RSVP section, and the footer |
 | Colours and fonts | `css/styles.css` | the `:root { }` block at the very top |
 | Form questions | `index.html` | the form inside `<div class="form-wrap">` |
 
-**The deadline lives in two places** — the text and the `RSVP_DEADLINE` constant. Change
-both together. After the deadline passes, the form is replaced automatically with a
-"RSVPs have now closed" message, so late replies cannot slip in.
+RSVPs stay open with no automatic deadline.
 
 ### Adding a field to the form
 
