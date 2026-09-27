@@ -246,8 +246,9 @@
   </div>
 
   <div class="envelope" id="envelope" role="dialog" aria-modal="true"
-       aria-labelledby="card-message" hidden>
+       aria-label="An invitation from Maeygia" hidden>
     <div class="envelope__shell">
+      <button class="btn btn--primary envelope__open" id="envelope-open" type="button">Open invitation</button>
       <div class="envelope__back" aria-hidden="true"></div>
       <div class="envelope__flap envelope__flap--top" aria-hidden="true"></div>
       <div class="envelope__flap envelope__flap--left" aria-hidden="true"></div>
@@ -269,21 +270,6 @@
     </div>
   </div>
 
-  <script>
-    /* Independent watchdog: restore access even if the intro fails midway. */
-    window.setTimeout(function () {
-      var envelope = document.getElementById('envelope');
-      if (!envelope || envelope.hidden) { return; }
-      envelope.hidden = true;
-      document.documentElement.classList.remove('intro-locked');
-      document.querySelectorAll('[data-intro-background]').forEach(function (element) {
-        element.inert = false;
-        element.removeAttribute('data-intro-background');
-      });
-      document.querySelector('.hero__name').focus();
-      document.dispatchEvent(new CustomEvent('christening:intro-complete'));
-    }, 20000);
-  </script>
   <script src="/js/intro.js" defer></script>
   <script src="/js/main.js" defer></script>
 </body>

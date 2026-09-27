@@ -627,7 +627,7 @@ html.intro-locked body { overflow: hidden; }
   display: grid;
   place-items: center;
   overflow-y: auto;
-  padding: 2rem 1.25rem;
+  padding: 5rem 1.25rem;
   background: radial-gradient(ellipse at top, var(--blush), var(--bg) 70%);
   perspective: 1200px;
   transition: opacity 0.6s ease, visibility 0s linear 0.6s;
@@ -718,6 +718,17 @@ html.intro-locked body { overflow: hidden; }
 }
 .envelope:not(.is-revealed) .envelope__shell { transform: translateY(-4rem); }
 .envelope__shell { transition: transform 1s ease; }
+.envelope__open {
+  position: absolute;
+  z-index: 8;
+  top: calc(100% + 1.5rem);
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+}
+.envelope__open:hover { transform: translateX(-50%) translateY(-2px); }
+.envelope__open:active { transform: translateX(-50%); }
+.envelope__open[hidden] { display: none; }
 .envelope.is-revealed .envelope__shell::after { opacity: 0; transform: scale(1.2); }
 .envelope.is-revealed .envelope__flap--top { transform: rotateX(180deg); z-index: 1; }
 .envelope.is-revealed .envelope__card {
