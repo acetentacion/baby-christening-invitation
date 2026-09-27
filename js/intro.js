@@ -13,7 +13,8 @@
   var openButton = document.getElementById('envelope-open');
   if (!envelope || !yes || !no || !typed || !nudge || !heading || !openButton) { return; }
   var motion = window.matchMedia('(prefers-reduced-motion: reduce)');
-  var voice = window.speechSynthesis;
+  var voice = new Audio('/voice.mp3');
+  voice.preload = 'auto';
   var background = [];
   var declined = false;
   var opening = false;
@@ -21,8 +22,8 @@
   var typeTimer;
   var safetyTimer;
   var openTimer;
-  var speechTimer;
-  var utterance;
+
+
   var spoken = false;
   var revealing = false;
   var readyTimer;
@@ -30,45 +31,25 @@
   var card = envelope.querySelector('.envelope__card');
 
   function stopSpeech() {
-    window.clearTimeout(speechTimer);
-    try { if (voice) { voice.cancel(); } } catch (error) { /* Speech is optional. */ }
+    voice.pause();
+    try { voice.currentTime = 0; } catch (error) { /* Audio may not be loaded yet. */ }
   }
   function finishTyping() {
     window.clearInterval(typeTimer);
     typed.textContent = LINE;
   }
-  function pickVoice() {
-    var voices = voice.getVoices().filter(function (item) {
-      return /^en(-|_|$)/i.test(item.lang || '');
-    });
-    var preferred = ['Samantha', 'Jenny', 'Aria', 'Google US English', 'Karen', 'Zira'];
-    for (var i = 0; i < preferred.length; i++) {
-      for (var j = 0; j < voices.length; j++) {
-        if (voices[j].name.indexOf(preferred[i]) !== -1) { return voices[j]; }
-      }
-    }
-    return voices.filter(function (item) { return item.localService; })[0] || voices[0];
-  }
   function speak() {
-    if (!ready || spoken || opening || finished || !voice || !window.SpeechSynthesisUtterance) { return; }
+    if (spoken || opening || finished) { return; }
     spoken = true;
-    window.clearTimeout(speechTimer);
     try {
-      utterance = new window.SpeechSynthesisUtterance(LINE);
-      utterance.lang = 'en-US';
-      // A gentle, childlike approximation; installed voices vary by device.
-      utterance.rate = 0.88;
-      utterance.pitch = 1.65;
-      utterance.volume = 0.85;
-      var chosen = pickVoice();
-      if (chosen) {
-        utterance.voice = chosen;
-        utterance.lang = chosen.lang;
+      var playback = voice.play();
+      if (playback && playback.catch) {
+        playback.catch(function () {
+          spoken = false;
+          finishTyping();
+        });
       }
-      // Speech completion or rejection must never decide the guest's answer.
-      utterance.onerror = function () { finishTyping(); };
-      voice.speak(utterance);
-    } catch (error) { finishTyping(); }
+    } catch (error) { spoken = false; finishTyping(); }
   }
   function finish() {
     if (finished) { return; }
@@ -78,7 +59,7 @@
     window.clearTimeout(readyTimer);
     finishTyping();
     stopSpeech();
-    if (voice && voice.removeEventListener) { voice.removeEventListener('voiceschanged', speak); }
+
     envelope.hidden = true;
     document.documentElement.classList.remove('intro-locked');
     background.forEach(function (element) {
@@ -148,6 +129,8 @@
   function revealCard() {
     if (finished || opening || revealing) { return; }
     revealing = true;
+    // Play directly from the tap so mobile browsers allow the recording.
+    speak();
     safetyTimer = window.setTimeout(finish, SAFETY_MS);
     envelope.focus({ preventScroll: true });
     openButton.hidden = true;
@@ -183,10 +166,7 @@
         if (count >= LINE.length) { finishTyping(); }
       }, 55);
     }
-    if (voice) {
-      if (voice.addEventListener) { voice.addEventListener('voiceschanged', speak); }
-      speechTimer = window.setTimeout(speak, 350);
-    }
+
   }
   openButton.addEventListener('click', revealCard);
   window.addEventListener('pagehide', finish);
