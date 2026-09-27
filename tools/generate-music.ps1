@@ -1,4 +1,3 @@
-# Original synthesized lullaby. Re-run to rebuild the quiet, seamless WAV loop.
 Add-Type -TypeDefinition @'
 using System;
 using System.IO;
@@ -35,7 +34,6 @@ public static class InvitationMusic {
       double envelope=(1-Math.Exp(-t*45))*Math.Exp(-t*2.1)*Math.Min(1,(duration-t)/0.2);
       double phase=2*Math.PI*frequency*t;
       double sound=Math.Sin(phase)+0.18*Math.Sin(phase*2)*Math.Exp(-t*3);
-      // Wrap note tails into the beginning to keep the loop boundary smooth.
       mix[(offset+i)%mix.Length]+=gain*envelope*sound;
     }
   }

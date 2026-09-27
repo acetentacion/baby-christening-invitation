@@ -1,4 +1,3 @@
-/* Envelope invitation, shown on every visit. RSVP is handled by main.js. */
 (function () {
   'use strict';
   var LINE = 'Hi, I am Maeygia. Can you be my ninang/ninong?';
@@ -32,7 +31,7 @@
   function stopSpeech() {
     window.clearTimeout(audioTimer);
     voice.pause();
-    try { voice.currentTime = 0; } catch (error) { /* Audio may not be loaded yet. */ }
+    try { voice.currentTime = 0; } catch (error) {  }
   }
   function finishTyping() {
     window.clearInterval(typeTimer);
@@ -110,7 +109,6 @@
     speak();
     yes.focus();
   });
-  // Guests can take their time; recovery is only needed during the animation.
   heading.setAttribute('tabindex', '-1');
   Array.prototype.forEach.call(document.body.children, function (element) {
     if (element === envelope || /^(SCRIPT|STYLE)$/.test(element.tagName) || element.inert) { return; }
@@ -129,7 +127,6 @@
   function revealCard() {
     if (finished || opening || revealing) { return; }
     revealing = true;
-    // Give the envelope a brief head start before the recording begins.
     audioTimer = window.setTimeout(speak, 250);
     safetyTimer = window.setTimeout(finish, SAFETY_MS);
     envelope.focus({ preventScroll: true });
@@ -143,7 +140,6 @@
     window.clearTimeout(safetyTimer);
     envelope.setAttribute('aria-labelledby', 'card-message');
     card.inert = false;
-    // Wait for both portraits so slow connections never fade to an empty frame.
     var portraits = card.querySelectorAll('.card__photo');
     function animatePortrait() {
       if (finished || opening) { return; }

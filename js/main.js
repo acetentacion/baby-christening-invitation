@@ -1,8 +1,3 @@
-/* ==========================================================================
-   Baby Christening Invitation — behaviour
-   RSVP submission with a
-   no-JavaScript fallback, and light scroll affordances.
-   ========================================================================== */
 (function () {
   'use strict';
 
@@ -58,7 +53,6 @@
     var music = new Audio('/music.wav');
     music.loop = true;
     music.preload = 'none';
-    // The recording itself is quiet, including on devices that ignore volume.
     music.volume = 0.4;
     var pending = false;
     function play() {
@@ -73,7 +67,6 @@
       } catch (error) { pending = false; }
     }
     document.addEventListener('christening:intro-complete', play);
-    // Retry on a gesture if the browser blocks automatic playback.
     document.addEventListener('pointerdown', play);
     document.addEventListener('keydown', play);
     document.addEventListener('visibilitychange', function () {
@@ -83,14 +76,12 @@
     play();
   }
 
-  /* -------------------------------------------------------------- photo --- */
 
   function initPhoto() {
     var wrap = document.querySelector('[data-photo]');
     if (!wrap) { return; }
     var img = wrap.querySelector('img');
     if (!img) { wrap.remove(); return; }
-    // No photo supplied yet: drop the frame instead of showing a broken image.
     img.addEventListener('error', function () { wrap.hidden = true; });
     var photos = wrap.querySelectorAll('img');
     function startPhotos() {
@@ -106,7 +97,6 @@
     startPhotos();
   }
 
-  /* ------------------------------------------------------- form + gate --- */
 
   function initForm() {
     var form = document.getElementById('rsvp-form');
@@ -128,7 +118,6 @@
         return;
       }
 
-      // No fetch (very old browser, or blocked): use the plain HTML form POST.
       if (typeof window.fetch !== 'function' || typeof window.URLSearchParams !== 'function') {
         form.submit();
         return;
@@ -256,7 +245,6 @@
     if (error) { error.hidden = true; }
   }
 
-  /* --------------------------------------------------------- sticky RSVP --- */
 
   function initStickyRsvp() {
     var sticky = document.querySelector('[data-sticky-rsvp]');
@@ -289,7 +277,6 @@
     update();
   }
 
-  /* ------------------------------------------------------------- reveal --- */
 
   function initReveal() {
     var items = document.querySelectorAll('[data-reveal]');
@@ -313,8 +300,6 @@
 
     observeReveals();
 
-    // js/intro.js keeps the cards out of sight until the spoken line has ended;
-    // re-arm the observer once they are actually on screen.
     document.addEventListener('christening:intro-complete', observeReveals);
   }
 

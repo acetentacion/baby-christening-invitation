@@ -1,41 +1,29 @@
-/* ==========================================================================
-   Baby Christening Invitation — Maeygia Eikana A. Pojadas
-   Mobile-first. No framework, no build step.
-   To re-theme the whole page, edit the :root custom properties below.
-   ========================================================================== */
 
 :root {
-  /* Surfaces */
   --bg: #fff7fb;
   --surface: #ffffff;
   --tint: #fce8f1;
 
-  /* Ink */
   --ink: #49323f;
   --ink-soft: #775b6c;
 
-  /* Pastel palette */
   --blush: #f6cfe1;
   --rose: #a83f70;
   --sage: #f3d5e5;
   --sage-deep: #884667;
   --hairline: #c9a96a;
 
-  /* Type */
   --font-display: "Fraunces", "Iowan Old Style", "Palatino Linotype", Georgia, serif;
   --font-body: "Nunito", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 
-  /* Shape */
   --radius: 18px;
   --radius-sm: 12px;
   --shadow: 0 10px 30px -18px rgba(58, 51, 48, 0.45);
 
-  /* Rhythm */
   --gutter: 1.25rem;
   --measure: 34rem;
 }
 
-/* --------------------------------------------------------------- Reset --- */
 
 *,
 *::before,
@@ -93,7 +81,6 @@ a { color: var(--sage-deep); }
   left: 0;
 }
 
-/* -------------------------------------------------------------- Buttons --- */
 
 .btn {
   --btn-bg: transparent;
@@ -103,7 +90,7 @@ a { color: var(--sage-deep); }
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  min-height: 48px;              /* comfortable tap target */
+  min-height: 48px;
   padding: 0.75rem 1.5rem;
   border: 2px solid var(--btn-bd);
   border-radius: 999px;
@@ -151,7 +138,6 @@ a { color: var(--sage-deep); }
   transform: none;
 }
 
-/* ----------------------------------------------------------------- Hero --- */
 
 .hero {
   position: relative;
@@ -256,7 +242,6 @@ a { color: var(--sage-deep); }
   z-index: 1;
 }
 
-/* Decorative art */
 .hero__art {
   position: absolute;
   inset: 0;
@@ -300,9 +285,6 @@ a { color: var(--sage-deep); }
   to   { transform: rotate(3.5deg); }
 }
 
-/* ------------------------------------------------------- Ambient petals --- */
-/* A fixed, non-interactive layer of drifting petals over the whole page.
-   Position, timing and drift are set per petal with inline custom properties. */
 
 .petals {
   position: fixed;
@@ -331,8 +313,6 @@ a { color: var(--sage-deep); }
   }
 }
 
-/* Vertical travel is spaced in proportion to the keyframe percentages so the
-   fall keeps a constant speed; only the horizontal drift and spin vary. */
 @keyframes petal-fall {
   0% {
     transform: translate3d(0, -8vh, 0) rotate(0deg);
@@ -349,12 +329,10 @@ a { color: var(--sage-deep); }
   }
 }
 
-/* Fewer petals on small screens so text stays readable. */
 @media (max-width: 640px) {
   .petal:nth-child(n + 7) { display: none; }
 }
 
-/* -------------------------------------------------------------- Section --- */
 
 .section {
   max-width: var(--measure);
@@ -387,7 +365,6 @@ a { color: var(--sage-deep); }
   color: var(--ink-soft);
 }
 
-/* ---------------------------------------------------------------- Cards --- */
 
 .cards {
   display: grid;
@@ -429,7 +406,6 @@ a { color: var(--sage-deep); }
   text-align: center;
 }
 
-/* Animate revealed cards without hiding content when JavaScript is unavailable. */
 @media (prefers-reduced-motion: no-preference) {
   [data-reveal].is-revealed { animation: card-reveal 0.6s ease both; }
 }
@@ -438,7 +414,6 @@ a { color: var(--sage-deep); }
   to { opacity: 1; transform: none; }
 }
 
-/* ----------------------------------------------------------------- Form --- */
 
 .form-wrap { max-width: 30rem; margin: 0 auto; }
 
@@ -457,7 +432,7 @@ a { color: var(--sage-deep); }
   min-height: 52px;
   padding: 0.85rem 1rem;
   font: inherit;
-  font-size: 16px;              /* prevents iOS zoom on focus */
+  font-size: 16px;
   color: var(--ink);
   background: var(--surface);
   border: 2px solid rgba(201, 169, 106, 0.45);
@@ -541,7 +516,6 @@ a { color: var(--sage-deep); }
   white-space: nowrap;
 }
 
-/* --------------------------------------------------------------- Panels --- */
 
 .panel {
   background: var(--surface);
@@ -570,7 +544,6 @@ a { color: var(--sage-deep); }
   font-weight: 700;
 }
 
-/* --------------------------------------------------------------- Footer --- */
 
 .footer {
   position: relative;
@@ -594,7 +567,6 @@ a { color: var(--sage-deep); }
 .footer__note { margin-top: 0.5rem; font-weight: 700; }
 .footer__meta { margin-top: 0.25rem; font-size: 0.875rem; opacity: 0.8; }
 
-/* --------------------------------------------------------- Sticky RSVP --- */
 
 .sticky-rsvp {
   position: fixed;
@@ -666,11 +638,9 @@ a { color: var(--sage-deep); }
 @media (min-width: 1024px) { .baby-sticker { bottom: 1rem; } }
 @media print { .baby-sticker { display: none !important; } }
 
-/* ----------------------------------------------------------------- Intro --- */
 html.intro-locked,
 html.intro-locked body { overflow: hidden; }
 
-/* Content remains available if JavaScript is disabled or fails to load. */
 .envelope[hidden] { display: none; }
 .envelope:focus { outline: none; }
 .envelope {
@@ -791,7 +761,6 @@ html.intro-locked body { overflow: hidden; }
   clip-path: polygon(100% 0, 100% 100%, 0 100%);
   transform-origin: right center;
 }
-/* Start tucked inside the envelope, then lift above the pocket. */
 .envelope__card {
   position: relative;
   z-index: 3;
@@ -1011,7 +980,6 @@ html.intro-locked body { overflow: hidden; }
   .envelope.is-open .envelope__card { transform: none; }
 }
 
-/* ------------------------------------------------------------ Breakpoints --- */
 
 @media (min-width: 640px) {
   :root { --gutter: 2rem; }
@@ -1026,7 +994,6 @@ html.intro-locked body { overflow: hidden; }
   .sticky-rsvp { display: none; }
 }
 
-/* ------------------------------------------------- User preferences --- */
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
@@ -1051,7 +1018,6 @@ html.intro-locked body { overflow: hidden; }
   .choice__box { border-color: var(--ink-soft); }
 }
 
-/* ---------------------------------------------------------------- Print --- */
 
 @media print {
   :root { --bg: #fff; --tint: #fff; }

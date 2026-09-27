@@ -1,19 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-<!--
-  ============================================================================
-  EDIT THE EVENT DETAILS HERE
-  ============================================================================
-  Baby photos .............. images/baby.png and images/baby1.png
-  Baby's name .............. h1, title, meta tags, footer below
-  Date ..................... "24 October 2026" (hero, ceremony card, footer)
-  Ceremony time ............ "1:00 PM" (ceremony card)
-  Ceremony venue ........... "Fatima Parish Church" (ceremony card, maps link)
-  Reception venue .......... "Camp Wagi, Masao, Butuan City" (reception card)
-  RSVP ..................... open with no reply deadline
-  Parents / hosts .......... the "EDIT" line inside the hero
-  ============================================================================
--->
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -27,7 +13,6 @@
   <meta property="og:description" content="24 October 2026 &middot; Fatima Parish Church &middot; Camp Wagi, Masao, Butuan City">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://maeygia.netlify.app/">
-  <!-- Use a new image filename when updating the preview to avoid stale social caches. -->
   <meta property="og:image" content="https://maeygia.netlify.app/images/preview-share-v2.jpg">
   <meta property="og:image:secure_url" content="https://maeygia.netlify.app/images/preview-share-v2.jpg">
   <meta property="og:image:type" content="image/jpeg">
@@ -90,7 +75,6 @@
 
       <p class="hero__eyebrow">Together with our families, we joyfully announce the christening of</p>
       <h1 class="hero__name">Maeygia<span class="hero__name-break"> </span>Eikana A. Pojadas</h1>
-      <!-- EDIT: replace this line with the parents' / godparents' names -->
       <p class="hero__hosts">with the love of our parents</p>
 
       <p class="hero__date">
@@ -112,7 +96,7 @@
       <section class="section" id="details" aria-labelledby="details-heading">
         <h2 class="section__title" id="details-heading">The Details</h2>
         <p class="section__lede">Two happy occasions, one beautiful day.</p>
-  
+
         <div class="cards">
           <article class="card" data-reveal>
             <p class="card__eyebrow">Ceremony</p>
@@ -124,7 +108,7 @@
               </div>
               <div class="card__row">
                 <dt>Where</dt>
-                <dd>Fatima Parish Church</dd>
+                <dd>Fatima Parish Church, Libertad, Butuan City</dd>
               </div>
             </dl>
             <a class="btn btn--ghost"
@@ -134,7 +118,7 @@
               <span class="btn__icon" aria-hidden="true">&nearr;</span>
             </a>
           </article>
-  
+
           <article class="card" data-reveal>
             <p class="card__eyebrow">Reception</p>
             <h3 class="card__title">Celebration</h3>
@@ -156,7 +140,7 @@
             </a>
           </article>
         </div>
-  
+
         <article class="card dress-code" aria-labelledby="dress-code-heading">
           <p class="card__eyebrow">A little color, a lot of joy</p>
           <h3 class="card__title" id="dress-code-heading">Dress Code</h3>
@@ -190,13 +174,13 @@
           </a>
         </p>
       </section>
-  
+
       <section class="section section--tint" id="rsvp" aria-labelledby="rsvp-heading">
         <h2 class="section__title" id="rsvp-heading">Kindly RSVP</h2>
         <p class="section__lede">
           Please let us know if you can join us so we can plan for everyone.
         </p>
-  
+
         <div class="form-wrap">
           <form name="christening-rsvp"
                 id="rsvp-form"
@@ -206,11 +190,11 @@
                 netlify-honeypot="bot-field"
                 novalidate>
             <input type="hidden" name="form-name" value="christening-rsvp">
-  
+
             <p class="honeypot">
               <label>Leave this field empty <input name="bot-field" tabindex="-1" autocomplete="off"></label>
             </p>
-  
+
             <div class="field">
               <label class="field__label" for="rsvp-name">Guest name(s)</label>
               <input class="field__input"
@@ -223,7 +207,7 @@
                      placeholder="e.g. Maria &amp; Juan Dela Cruz">
               <p class="field__error" data-error-for="rsvp-name" hidden>Please tell us your name.</p>
             </div>
-  
+
             <fieldset class="field field--choice">
               <legend class="field__label">Will you be joining us?</legend>
               <div class="choices">
@@ -244,13 +228,13 @@
               </div>
               <p class="field__error" data-error-for="attending" hidden>Please choose one.</p>
             </fieldset>
-  
+
             <button class="btn btn--primary btn--block" type="submit" id="rsvp-submit">Send my RSVP</button>
-  
+
             <p class="form-status" id="form-status" role="status" aria-live="polite"></p>
           </form>
-  
-  
+
+
           <div class="panel panel--thanks" id="rsvp-thanks" hidden>
             <span class="panel__mark" aria-hidden="true">&#10003;</span>
             <h3 class="panel__title">Thank you!</h3>
@@ -259,7 +243,7 @@
         </div>
       </section>
     </main>
-  
+
     <footer class="footer">
       <img class="flower flower--footer-left" src="/images/flower.svg" alt="" aria-hidden="true">
       <img class="flower flower--footer-right" src="/images/flower.svg" alt="" aria-hidden="true">
