@@ -92,7 +92,8 @@ background at normal text sizes.
 2. In Netlify: **Add new site → Import an existing project**, and pick the repository.
 3. Leave the build settings as they are detected — publish directory is `.` and the build
    command is empty. `netlify.toml` already sets this.
-4. Deploy.
+4. In the project's **Forms** section, select **Enable form detection** if it is not already enabled.
+5. Deploy (or redeploy after enabling detection). Verify that `christening-rsvp` appears in **Forms** before sharing the invitation.
 
 **The RSVP form only appears in the dashboard after the first successful deploy**, because
 Netlify builds its form definition by reading the deployed HTML.
@@ -120,8 +121,10 @@ discarded automatically.
   submits normally and the guest lands on `success.html`.
 - With JavaScript enabled, the submission happens in the background and the guest sees a
   thank-you message in place, without a page reload.
-- If the background request fails (offline, blocked, server error), the code deliberately
-  falls back to the normal form POST, so a guest is never left with a dead form.
+- If a background request fails or takes over 20 seconds, the form keeps the guest's
+  answers, shows an error, and enables retry. It does not automatically submit a second request.
+- Local previews cannot collect RSVPs. Test submissions on the deployed Netlify site,
+  and verify receipt in **Forms > christening-rsvp**, including the spam submissions view.
 - Name and attending choice are validated inline; the honeypot field filters bots.
 - The button is disabled while the request is in flight so nobody can double-submit.
 

@@ -69,8 +69,18 @@
 
     form.addEventListener('submit', function (event) {
       event.preventDefault();
+      if (submitBtn.disabled) { return; }
+      if (new Date().getTime() >= RSVP_DEADLINE.getTime()) {
+        form.hidden = true;
+        if (closed) { closed.hidden = false; }
+        return;
+      }
 
       if (!validate(form)) { return; }
+      if (window.location.protocol === 'file:' || /^(localhost|127\.0\.0\.1|\[::1\])$/.test(window.location.hostname)) {
+        status.textContent = 'Please open the live invitation website to send your RSVP.';
+        return;
+      }
 
       // No fetch (very old browser, or blocked): use the plain HTML form POST.
       if (typeof window.fetch !== 'function' || typeof window.URLSearchParams !== 'function') {
@@ -82,20 +92,36 @@
       submitBtn.setAttribute('aria-disabled', 'true');
       submitBtn.textContent = 'Sending…';
       status.textContent = '';
+      form.setAttribute('aria-busy', 'true');
 
       var payload = new URLSearchParams(new FormData(form)).toString();
-
-      fetch('/', {
+      var controller = typeof window.AbortController === 'function' ? new window.AbortController() : null;
+      var timer;
+      var request = {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: payload
-      }).then(function (response) {
-        // Fall through to the native POST (success.html) if Netlify did not accept it.
-        if (!response.ok) { form.submit(); return; }
+      };
+      if (controller) { request.signal = controller.signal; }
+
+      var timeout = new Promise(function (resolve, reject) {
+        timer = window.setTimeout(function () {
+          reject(new Error('timeout'));
+          if (controller) { controller.abort(); }
+        }, 20000);
+      });
+      Promise.race([fetch('/', request), timeout]).then(function (response) {
+        if (!response.ok) { throw new Error('HTTP ' + response.status); }
+        window.clearTimeout(timer);
+        form.removeAttribute('aria-busy');
         showThanks(form, thanks, thanksMessage, status);
       })['catch'](function () {
-        // Offline, blocked, or the request failed: let the browser post the form.
-        form.submit();
+        window.clearTimeout(timer);
+        form.removeAttribute('aria-busy');
+        submitBtn.disabled = false;
+        submitBtn.removeAttribute('aria-disabled');
+        submitBtn.textContent = 'Send my RSVP';
+        status.textContent = 'We could not confirm your RSVP. Your answers are still here. Please check your connection and try again, or contact the family if this continues.';
       });
     });
 
