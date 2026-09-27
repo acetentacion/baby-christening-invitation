@@ -41,7 +41,7 @@
     var voices = voice.getVoices().filter(function (item) {
       return /^en(-|_|$)/i.test(item.lang || '');
     });
-    var preferred = ['Google US English', 'Samantha', 'Aria', 'Jenny', 'Karen', 'Daniel'];
+    var preferred = ['Samantha', 'Jenny', 'Aria', 'Google US English', 'Karen', 'Zira'];
     for (var i = 0; i < preferred.length; i++) {
       for (var j = 0; j < voices.length; j++) {
         if (voices[j].name.indexOf(preferred[i]) !== -1) { return voices[j]; }
@@ -56,10 +56,15 @@
     try {
       utterance = new window.SpeechSynthesisUtterance(LINE);
       utterance.lang = 'en-US';
-      utterance.rate = 0.9;
-      utterance.pitch = 1.05;
+      // A gentle, childlike approximation; installed voices vary by device.
+      utterance.rate = 0.88;
+      utterance.pitch = 1.65;
+      utterance.volume = 0.85;
       var chosen = pickVoice();
-      if (chosen) { utterance.voice = chosen; }
+      if (chosen) {
+        utterance.voice = chosen;
+        utterance.lang = chosen.lang;
+      }
       // Speech completion or rejection must never decide the guest's answer.
       utterance.onerror = function () { finishTyping(); };
       voice.speak(utterance);

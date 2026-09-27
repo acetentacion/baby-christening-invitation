@@ -837,6 +837,24 @@ html.intro-locked body { overflow: hidden; }
   to { transform: rotate(7deg) translateY(-4px); }
 }
 .dress-code { margin-top: 1.75rem; text-align: center; }
+.gift-guide { margin-top: 1.25rem; text-align: center; }
+.gift-guide__note { margin-top: 0.85rem; color: var(--ink-soft); }
+.gift-guide__list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.65rem;
+  margin: 1.25rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+.gift-guide__list li {
+  padding: 0.85rem 0.5rem;
+  border-radius: var(--radius-sm);
+  background: var(--tint);
+  overflow-wrap: anywhere;
+}
+.gift-guide__list strong { display: block; color: var(--rose); }
+.gift-guide__list span { display: block; font-size: 0.875rem; color: var(--ink-soft); }
 .dress-code p { margin-top: 0.75rem; color: var(--ink-soft); }
 .dress-code__colors {
   display: flex;
