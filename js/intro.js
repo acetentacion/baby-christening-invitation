@@ -22,8 +22,7 @@
   var typeTimer;
   var safetyTimer;
   var openTimer;
-
-
+  var audioTimer;
   var spoken = false;
   var revealing = false;
   var readyTimer;
@@ -31,6 +30,7 @@
   var card = envelope.querySelector('.envelope__card');
 
   function stopSpeech() {
+    window.clearTimeout(audioTimer);
     voice.pause();
     try { voice.currentTime = 0; } catch (error) { /* Audio may not be loaded yet. */ }
   }
@@ -129,8 +129,8 @@
   function revealCard() {
     if (finished || opening || revealing) { return; }
     revealing = true;
-    // Play directly from the tap so mobile browsers allow the recording.
-    speak();
+    // Give the envelope a brief head start before the recording begins.
+    audioTimer = window.setTimeout(speak, 250);
     safetyTimer = window.setTimeout(finish, SAFETY_MS);
     envelope.focus({ preventScroll: true });
     openButton.hidden = true;
