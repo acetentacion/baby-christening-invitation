@@ -23,7 +23,37 @@
     initStickyRsvp();
     initReveal();
     initPhoto();
+    initMusic();
   });
+
+  function initMusic() {
+    var music = new Audio('/music.wav');
+    music.loop = true;
+    music.preload = 'none';
+    // The recording itself is quiet, including on devices that ignore volume.
+    music.volume = 0.4;
+    var pending = false;
+    function play() {
+      if (pending || !music.paused || document.hidden ||
+          document.documentElement.classList.contains('intro-locked')) { return; }
+      pending = true;
+      try {
+        var result = music.play();
+        if (result && result.then) {
+          result.then(function () { pending = false; }, function () { pending = false; });
+        } else { pending = false; }
+      } catch (error) { pending = false; }
+    }
+    document.addEventListener('christening:intro-complete', play);
+    // Retry on a gesture if the browser blocks automatic playback.
+    document.addEventListener('pointerdown', play);
+    document.addEventListener('keydown', play);
+    document.addEventListener('visibilitychange', function () {
+      if (document.hidden) { music.pause(); } else { play(); }
+    });
+    window.addEventListener('pagehide', function () { music.pause(); });
+    play();
+  }
 
   /* -------------------------------------------------------------- photo --- */
 
