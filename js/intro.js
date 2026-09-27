@@ -1,247 +1,142 @@
-/* ==========================================================================
-   Baby Christening Invitation — intro presentation
-   A short spoken welcome plays over a staged hero reveal, once per browser.
-   The markup ships with .intro-stage hidden; this controller reveals it, and
-   the inline safety net in index.html reveals it if this file never runs.
-   ========================================================================== */
+/* Envelope invitation, shown on every visit. RSVP is handled by main.js. */
 (function () {
   'use strict';
-
-  /* EDIT: the line spoken during the intro. */
-  var LINE = 'Hi Ninong, Ninang, I am Maeygia. Welcome to my christening day!';
-
-  var SEEN_KEY = 'christeningIntroSeen';
-  var TYPE_MS = 70;          /* milliseconds per typed character */
-  var LIFT_MS = 350;         /* beat of darkness before the hero appears */
-  var START_CHECK_MS = 500;  /* how long to wait for speech to actually start */
-  var SAFETY_MS = 12000;     /* hard stop, so the page can never stay stuck */
-  var LIFT_FADE_MS = 700;    /* overlay fade duration, must match the CSS */
-
-  var root = document.documentElement;
-  var body = document.body;
-  var stage = document.getElementById('intro-stage');
-  var overlay = document.getElementById('intro-overlay');
-  var controls = document.getElementById('intro-controls');
-  var beginBtn = document.getElementById('intro-begin');
-  var skipBtn = document.getElementById('intro-skip');
-  var nameEl = document.querySelector('.hero__name');
-
-  var timers = [];
-  var typeTimer = null;
-  var typeOriginal = '';
-  var isDone = false;
-
-  var onReady = function (fn) {
-    if (document.readyState !== 'loading') { fn(); }
-    else { document.addEventListener('DOMContentLoaded', fn); }
-  };
-
-  var later = function (fn, ms) {
-    var id = window.setTimeout(function () {
-      timers = timers.filter(function (other) { return other !== id; });
-      fn();
-    }, ms);
-    timers.push(id);
-    return id;
-  };
-
-  var clearTimers = function () {
-    timers.forEach(window.clearTimeout);
-    timers = [];
-  };
-
-  /* ------------------------------------------------------------- helpers --- */
-
-  function prefersReducedMotion() {
-    return !!(window.matchMedia &&
-      window.matchMedia('(prefers-reduced-motion: reduce)').matches);
-  }
-
-  function hasSeenIntro() {
-    try { return window.localStorage.getItem(SEEN_KEY) === '1'; } catch (error) { return false; }
-  }
-
-  function markSeen() {
-    try { window.localStorage.setItem(SEEN_KEY, '1'); } catch (error) { /* private mode */ }
-  }
-
-  function synth() {
-    return window.speechSynthesis || null;
-  }
-
-  /* ------------------------------------------------------------ the flow --- */
-
-  onReady(function () {
-    window.__christeningIntro = true; // tells the inline safety net we are live
-
-    if (!stage || !overlay || !skipBtn || !beginBtn || !controls) { return; }
-
-    // No speech support, an earlier visit, or a request for less motion: no intro.
-    if (!synth() || hasSeenIntro() || prefersReducedMotion()) { revealNow(); return; }
-
-    play();
-  });
-
-  function play() {
-    markSeen();
-    root.classList.add('intro-locked');
-    body.classList.add('is-intro');
-    overlay.classList.add('is-armed');
-    controls.hidden = false;
-    skipBtn.hidden = false;
-
-    startTypewriter();
-    later(lift, LIFT_MS);
-    later(function () { speak(false); }, LIFT_MS);
-    later(complete, SAFETY_MS);
-  }
-
-  function lift() {
-    overlay.classList.add('is-lifted');
-  }
-
-  /* The intro either finishes on its own or is skipped; both fade the page up. */
-  function complete() {
-    if (isDone) { return; }
-    isDone = true;
-
-    clearTimers();
-    finishTypewriter();
-    stopSpeech();
-
-    body.classList.remove('is-intro');
-    controls.hidden = true;
-    beginBtn.hidden = true;
-    skipBtn.hidden = true;
-    root.classList.remove('intro-locked');
-
-    stage.classList.add('is-revealed');
-    overlay.classList.add('is-lifted');
-    later(function () { overlay.classList.add('is-gone'); }, LIFT_FADE_MS);
-
-    document.dispatchEvent(new CustomEvent('christening:intro-complete'));
-  }
-
-  /* Used when the intro is not part of this visit: show the page at once. */
-  function revealNow() {
-    stage.classList.add('is-revealed', 'is-instant');
-    overlay.classList.add('is-gone');
-    root.classList.remove('intro-locked');
-  }
-
-  /* ------------------------------------------------------------- speech --- */
-
-  function speak(fromGesture) {
-    var voice = synth();
-    if (!voice) { complete(); return; }
-
-    var line = new SpeechSynthesisUtterance(LINE);
-    line.lang = 'en-US';
-    line.rate = 0.9;
-    line.pitch = 1.05;
-
-    var chosen = pickVoice();
-    if (chosen) { line.voice = chosen; }
-
-    line.onend = complete;
-    line.onerror = complete;
-
-    try {
-      voice.speak(line);
-    } catch (error) {
-      complete();
-      return;
-    }
-
-    // Most browsers refuse to speak without a user gesture. If nothing started,
-    // offer a button that will, and keep the skip button as the way out.
-    later(function () {
-      if (isDone || voice.speaking || voice.pending) { return; }
-      voice.cancel();
-      if (fromGesture) { complete(); return; }
-      showBeginButton();
-    }, START_CHECK_MS);
-  }
+  var LINE = 'Hi, I am Maeygia. Can you be my ninang/ninong?';
+  var SAFETY_MS = 15000;
+  var OPEN_MS = 1100;
+  var envelope = document.getElementById('envelope');
+  var yes = document.getElementById('card-yes');
+  var no = document.getElementById('card-no');
+  var typed = document.getElementById('card-typed');
+  var nudge = document.getElementById('card-nudge');
+  var heading = document.querySelector('.hero__name');
+  if (!envelope || !yes || !no || !typed || !nudge || !heading) { return; }
+  var motion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  var voice = window.speechSynthesis;
+  var background = [];
+  var declined = false;
+  var opening = false;
+  var finished = false;
+  var typeTimer;
+  var safetyTimer;
+  var openTimer;
+  var speechTimer;
+  var utterance;
+  var spoken = false;
 
   function stopSpeech() {
-    var voice = synth();
-    if (voice) { voice.cancel(); }
+    window.clearTimeout(speechTimer);
+    try { if (voice) { voice.cancel(); } } catch (error) { /* Speech is optional. */ }
   }
-
-  function showBeginButton() {
-    if (isDone) { return; }
-    beginBtn.hidden = false;
-    beginBtn.focus();
+  function finishTyping() {
+    window.clearInterval(typeTimer);
+    typed.textContent = LINE;
   }
-
   function pickVoice() {
-    var all = synth().getVoices() || [];
-    if (!all.length) { return null; }
-
-    var english = all.filter(function (voice) {
-      return /^en(-|_|$)/i.test(voice.lang || '');
+    var voices = voice.getVoices().filter(function (item) {
+      return /^en(-|_|$)/i.test(item.lang || '');
     });
-    if (!english.length) { return null; }
-
     var preferred = ['Google US English', 'Samantha', 'Aria', 'Jenny', 'Karen', 'Daniel'];
     for (var i = 0; i < preferred.length; i++) {
-      var match = english.filter(function (voice) {
-        return voice.name === preferred[i];
-      })[0];
-      if (match) { return match; }
+      for (var j = 0; j < voices.length; j++) {
+        if (voices[j].name.indexOf(preferred[i]) !== -1) { return voices[j]; }
+      }
     }
-
-    return english.filter(function (voice) { return voice.localService; })[0] || english[0];
+    return voices.filter(function (item) { return item.localService; })[0] || voices[0];
   }
-
-  /* ---------------------------------------------------------- typewriter --- */
-
-  function startTypewriter() {
-    if (!nameEl || prefersReducedMotion()) { return; }
-
-    typeOriginal = nameEl.innerHTML;
-    var text = nameEl.textContent;
-    if (!text) { return; }
-
-    var caret = document.createElement('span');
-    caret.className = 'hero__caret';
-    caret.setAttribute('aria-hidden', 'true');
-    nameEl.textContent = '';
-    nameEl.appendChild(caret);
-
-    var typed = 0;
-    typeTimer = window.setInterval(function () {
-      nameEl.insertBefore(document.createTextNode(text.charAt(typed)), caret);
-      typed += 1;
-      if (typed >= text.length) { finishTypewriter(); }
-    }, TYPE_MS);
+  function speak() {
+    if (spoken || opening || finished || !voice || !window.SpeechSynthesisUtterance) { return; }
+    spoken = true;
+    window.clearTimeout(speechTimer);
+    try {
+      utterance = new window.SpeechSynthesisUtterance(LINE);
+      utterance.lang = 'en-US';
+      utterance.rate = 0.9;
+      utterance.pitch = 1.05;
+      var chosen = pickVoice();
+      if (chosen) { utterance.voice = chosen; }
+      // Speech completion or rejection must never decide the guest's answer.
+      utterance.onerror = function () { finishTyping(); };
+      voice.speak(utterance);
+    } catch (error) { finishTyping(); }
   }
-
-  function finishTypewriter() {
-    if (!typeTimer) { return; }
-    window.clearInterval(typeTimer);
-    typeTimer = null;
-    if (typeOriginal) { nameEl.innerHTML = typeOriginal; }
-  }
-
-  /* ------------------------------------------------------------- wiring --- */
-
-  function wireControls() {
-    if (!skipBtn || !beginBtn) { return; }
-
-    skipBtn.addEventListener('click', complete);
-
-    beginBtn.addEventListener('click', function () {
-      if (isDone) { return; }
-      beginBtn.hidden = true;
-      clearTimers();                       // re-arm the safety stop from this tap
-      later(complete, SAFETY_MS);
-      speak(true);
+  function finish() {
+    if (finished) { return; }
+    finished = true;
+    window.clearTimeout(safetyTimer);
+    window.clearTimeout(openTimer);
+    finishTyping();
+    stopSpeech();
+    if (voice && voice.removeEventListener) { voice.removeEventListener('voiceschanged', speak); }
+    envelope.hidden = true;
+    document.documentElement.classList.remove('intro-locked');
+    background.forEach(function (element) {
+      element.inert = false;
+      element.removeAttribute('data-intro-background');
     });
+    document.removeEventListener('keydown', onKey);
+    document.removeEventListener('focusin', onFocus);
+    heading.focus({ preventScroll: true });
+    document.dispatchEvent(new CustomEvent('christening:intro-complete'));
   }
-
-  onReady(wireControls);
-
-  // Leaving the page mid-intro should not leave audio running in the background.
-  window.addEventListener('pagehide', stopSpeech);
+  function open() {
+    if (opening || finished) { return; }
+    opening = true;
+    finishTyping();
+    stopSpeech();
+    envelope.classList.add('is-open');
+    if (motion.matches) { finish(); }
+    else { openTimer = window.setTimeout(finish, OPEN_MS); }
+  }
+  function onKey(event) {
+    if (event.key === 'Escape') { event.preventDefault(); open(); }
+    if (event.key === 'Tab') {
+      event.preventDefault();
+      (document.activeElement === yes ? no : yes).focus();
+    }
+  }
+  function onFocus(event) {
+    if (!finished && !envelope.contains(event.target)) { yes.focus(); }
+  }
+  yes.addEventListener('click', open);
+  no.addEventListener('click', function () {
+    if (opening || finished) { return; }
+    if (declined) { open(); return; }
+    declined = true;
+    finishTyping();
+    nudge.textContent = 'Are you sure? Please say yes!';
+    no.textContent = 'Still no';
+    stopSpeech();
+    spoken = false;
+    speak();
+    yes.focus();
+  });
+  // Register recovery before changing visibility or locking the background.
+  safetyTimer = window.setTimeout(finish, SAFETY_MS);
+  heading.setAttribute('tabindex', '-1');
+  Array.prototype.forEach.call(document.body.children, function (element) {
+    if (element === envelope || /^(SCRIPT|STYLE)$/.test(element.tagName) || element.inert) { return; }
+    background.push(element);
+    element.setAttribute('data-intro-background', '');
+    element.inert = true;
+  });
+  envelope.hidden = false;
+  document.documentElement.classList.add('intro-locked');
+  document.addEventListener('keydown', onKey);
+  document.addEventListener('focusin', onFocus);
+  yes.focus();
+  if (!motion.matches) {
+    var count = 0;
+    typed.textContent = '';
+    typeTimer = window.setInterval(function () {
+      count += 1;
+      typed.textContent = LINE.slice(0, count);
+      if (count >= LINE.length) { finishTyping(); }
+    }, 55);
+  }
+  if (voice) {
+    if (voice.addEventListener) { voice.addEventListener('voiceschanged', speak); }
+    speechTimer = window.setTimeout(speak, 350);
+  }
+  window.addEventListener('pagehide', finish);
 }());

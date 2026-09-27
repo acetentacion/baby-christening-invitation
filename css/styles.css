@@ -422,13 +422,14 @@ a { color: var(--sage-deep); }
   text-align: center;
 }
 
-/* Reveal on scroll (JS adds .is-revealed; disabled under reduced motion) */
-[data-reveal] {
-  opacity: 0;
-  transform: translateY(18px);
-  transition: opacity 0.6s ease, transform 0.6s ease;
+/* Animate revealed cards without hiding content when JavaScript is unavailable. */
+@media (prefers-reduced-motion: no-preference) {
+  [data-reveal].is-revealed { animation: card-reveal 0.6s ease both; }
 }
-[data-reveal].is-revealed { opacity: 1; transform: none; }
+@keyframes card-reveal {
+  from { opacity: 0; transform: translateY(18px); }
+  to { opacity: 1; transform: none; }
+}
 
 /* ----------------------------------------------------------------- Form --- */
 
@@ -612,136 +613,109 @@ a { color: var(--sage-deep); }
 .sticky-rsvp:active { transform: translateX(-50%) translateY(2px); }
 
 /* ----------------------------------------------------------------- Intro --- */
-/* The page opens on a dark stage: a full-screen curtain covers the hero while
-   .intro-stage (details, RSVP, footer) stays hidden. The hero photo zooms in
-   and the name types itself while the line is spoken, then the curtain lifts
-   and the rest of the page fades up. js/intro.js drives the class changes. */
-
-.intro-overlay {
-  display: none;
-  position: fixed;
-  inset: 0;
-  z-index: 30;                 /* above the petals (15) and sticky RSVP (20) */
-  background: radial-gradient(120% 100% at 50% 28%, #2c2522 0%, #17120f 68%, #0f0b09 100%);
-  opacity: 1;
-  transition: opacity 0.7s ease, visibility 0s linear 0.7s;
-}
-.intro-overlay.is-armed { display: block; }
-.intro-overlay.is-lifted {
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
-  transition: opacity 0.7s ease, visibility 0s;
-}
-.intro-overlay.is-gone { display: none; }
-
-/* Locked while the intro runs; never set without js/intro.js, so a failure
-   cannot trap the visitor on a dark, unscrollable page. */
 html.intro-locked,
 html.intro-locked body { overflow: hidden; }
 
-/* Hidden but still laid out, so the scroll-reveal observers see it once shown. */
-.intro-stage {
-  visibility: hidden;
-  opacity: 0;
-  transition: opacity 0.8s ease, visibility 0s linear 0.8s;
-}
-.intro-stage.is-revealed {
-  visibility: visible;
-  opacity: 1;
-  transition: opacity 0.8s ease, visibility 0s;
-}
-.intro-stage.is-revealed.is-instant { transition: none; }
-html.intro-failed .intro-overlay { display: none; }
-html.intro-failed .intro-controls { display: none !important; }
-html.intro-failed .intro-stage { visibility: visible; opacity: 1; }
-
-/* Hero copy that waits its turn until the spoken line has finished. */
-.hero__eyebrow,
-.hero__hosts,
-.hero__date,
-.hero__cta {
-  transition: opacity 0.6s ease, transform 0.6s ease;
-}
-body.is-intro .hero__eyebrow,
-body.is-intro .hero__hosts,
-body.is-intro .hero__date,
-body.is-intro .hero__cta {
-  opacity: 0;
-  transform: translateY(10px);
-}
-
-.hero__caret {
-  display: inline-block;
-  width: 2px;
-  height: 0.9em;
-  margin-left: 0.06em;
-  vertical-align: -0.06em;
-  background: var(--rose);
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  body.is-intro .hero__photo { animation: photo-zoom 2.4s cubic-bezier(0.2, 0.7, 0.3, 1) both; }
-  .hero__caret { animation: caret-blink 1s step-end infinite; }
-}
-
-@keyframes photo-zoom {
-  from { opacity: 0; transform: scale(0.8); }
-  to   { opacity: 1; transform: scale(1); }
-}
-
-@keyframes caret-blink {
-  0%, 50% { opacity: 1; }
-  50.01%, 100% { opacity: 0; }
-}
-
-.intro-controls {
+/* Content remains available if JavaScript is disabled or fails to load. */
+.envelope[hidden] { display: none; }
+.envelope {
   position: fixed;
+  inset: 0;
   z-index: 40;
-  right: max(1rem, env(safe-area-inset-right, 0px));
-  bottom: max(1rem, env(safe-area-inset-bottom, 0px));
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 0.6rem;
+  display: grid;
+  place-items: center;
+  overflow-y: auto;
+  padding: 2rem 1.25rem;
+  background: radial-gradient(ellipse at top, var(--blush), var(--bg) 70%);
+  perspective: 1200px;
+  transition: opacity 0.35s ease 0.7s, visibility 0s linear 1.1s;
 }
-.intro-controls[hidden] { display: none; }
+.envelope__shell {
+  position: relative;
+  width: min(100%, 28rem);
+  margin: auto;
+  isolation: isolate;
+  perspective: 1000px;
+}
+.envelope__back {
+  position: absolute;
+  inset: 12% -0.35rem -0.35rem;
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius);
+  background: #ead1c5;
+  box-shadow: 0 22px 65px -25px rgba(58, 51, 48, 0.4);
+}
+.envelope__flap {
+  position: absolute;
+  z-index: 2;
+  pointer-events: none;
+  backface-visibility: hidden;
+  transition: transform 0.7s ease;
+}
+.envelope__flap--top {
+  inset: 12% -0.35rem auto;
+  height: 40%;
+  background: #e4bdb0;
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+  transform-origin: top center;
+}
+.envelope__flap--left,
+.envelope__flap--right {
+  bottom: -0.35rem;
+  width: 55%;
+  height: 65%;
+  background: #f0d5c9;
+}
+.envelope__flap--left {
+  left: -0.35rem;
+  clip-path: polygon(0 0, 100% 100%, 0 100%);
+  transform-origin: left center;
+}
+.envelope__flap--right {
+  right: -0.35rem;
+  clip-path: polygon(100% 0, 100% 100%, 0 100%);
+  transform-origin: right center;
+}
+/* The question sits above the flaps so both choices are always accessible. */
+.envelope__card {
+  position: relative;
+  z-index: 3;
+  margin: 0 1rem 1.25rem;
+  padding: clamp(1.25rem, 4vw, 2rem);
+  border: 1px solid rgba(201, 169, 106, 0.5);
+  border-radius: var(--radius);
+  background: var(--bg);
+  text-align: center;
+  box-shadow: var(--shadow);
+  transition: transform 0.7s ease, opacity 0.4s ease 0.4s;
+}
+.card__photo {
+  width: clamp(6rem, 24vw, 9rem);
+  height: auto;
+  aspect-ratio: 1;
+  object-fit: cover;
+  border-radius: 50%;
+  margin: 0 auto 1.25rem;
+  box-shadow: 0 0 0 4px var(--blush);
+}
+.card__message {
+  font-size: clamp(1.4rem, 5vw, 1.9rem);
+  line-height: 1.35;
+  min-height: 4.05em;
+  margin: 0.75rem 0 1.25rem;
+}
+.card__choices { display: flex; justify-content: center; gap: 0.75rem; flex-wrap: wrap; }
+.card__choices .btn { min-width: 6rem; }
+.card__nudge { min-height: 3.2em; margin-top: 1rem; color: var(--rose); font-weight: 700; }
+.envelope.is-open { opacity: 0; visibility: hidden; }
+.envelope.is-open .envelope__flap--top { transform: rotateX(180deg); }
+.envelope.is-open .envelope__flap--left { transform: rotateY(-140deg); }
+.envelope.is-open .envelope__flap--right { transform: rotateY(140deg); }
+.envelope.is-open .envelope__card { transform: translateY(-2rem); opacity: 0; }
 
-.intro-skip,
-.intro-begin {
-  min-height: 48px;
-  padding: 0.6rem 1.15rem;
-  border-radius: 999px;
-  font: inherit;
-  font-weight: 700;
-  cursor: pointer;
-  transition: transform 0.18s ease, background-color 0.18s ease;
-}
-.intro-skip {
-  border: 1px solid rgba(255, 255, 255, 0.45);
-  background: rgba(0, 0, 0, 0.4);
-  color: #fff;
-}
-.intro-skip:hover { background: rgba(0, 0, 0, 0.6); }
-.intro-skip[hidden],
-.intro-begin[hidden] { display: none; }
-
-.intro-begin {
-  border: 2px solid var(--rose);
-  background: var(--rose);
-  color: #fff;
-  box-shadow: 0 12px 28px -12px rgba(0, 0, 0, 0.85);
-}
-.intro-begin:active,
-.intro-skip:active { transform: translateY(1px); }
-
-@media (prefers-reduced-motion: no-preference) {
-  .intro-begin { animation: intro-pulse 1.8s ease-in-out infinite; }
-}
-
-@keyframes intro-pulse {
-  0%, 100% { box-shadow: 0 12px 28px -12px rgba(0, 0, 0, 0.85); }
-  50% { box-shadow: 0 12px 34px -6px rgba(180, 87, 79, 0.9); }
+@media (prefers-reduced-motion: reduce) {
+  .envelope, .envelope__card, .envelope__flap { transition: none; }
+  .envelope.is-open .envelope__card { transform: none; }
 }
 
 /* ------------------------------------------------------------ Breakpoints --- */
@@ -791,7 +765,7 @@ body.is-intro .hero__cta {
   .hero { background: none; padding-top: 1.5rem; }
   .hero__art, .hero__wave, .footer__wave, .sticky-rsvp, .petals,
   .form-wrap, .calendar-cta, .skip-link,
-  .intro-overlay, .intro-controls { display: none !important; }
+  .envelope { display: none !important; }
   html.intro-locked, html.intro-locked body { overflow: visible !important; }
   .intro-stage { visibility: visible !important; opacity: 1 !important; }
   body { color: #000; }

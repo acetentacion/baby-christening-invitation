@@ -31,13 +31,6 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600&amp;family=Nunito:wght@400;600;700&amp;display=swap">
   <link rel="stylesheet" href="/css/styles.css">
 
-  <!-- No JavaScript at all: drop the intro curtain instead of showing a dark page. -->
-  <noscript>
-    <style>
-      .intro-overlay { display: none !important; }
-      .intro-stage { visibility: visible !important; opacity: 1 !important; }
-    </style>
-  </noscript>
 </head>
 
 <body>
@@ -252,21 +245,44 @@
     <span class="petal" style="--x:95%; --size:14px; --dur:25s; --delay:-2s;  --drift:-34px; --tint-rgb:232,214,180"></span>
   </div>
 
-  <div class="intro-overlay is-armed" id="intro-overlay" aria-hidden="true"></div>
-
-  <div class="intro-controls" id="intro-controls" hidden>
-    <button class="intro-begin" id="intro-begin" type="button" hidden>Begin intro</button>
-    <button class="intro-skip" id="intro-skip" type="button" hidden>Skip intro</button>
+  <div class="envelope" id="envelope" role="dialog" aria-modal="true"
+       aria-labelledby="card-message" hidden>
+    <div class="envelope__shell">
+      <div class="envelope__back" aria-hidden="true"></div>
+      <div class="envelope__flap envelope__flap--top" aria-hidden="true"></div>
+      <div class="envelope__flap envelope__flap--left" aria-hidden="true"></div>
+      <div class="envelope__flap envelope__flap--right" aria-hidden="true"></div>
+      <div class="envelope__card">
+        <img class="card__photo" src="/images/baby.jpg"
+             alt="Maeygia Eikana A. Pojadas" width="200" height="200" decoding="async">
+        <p class="card__eyebrow">A little invitation, just for you</p>
+        <h2 class="card__message" id="card-message"
+            aria-label="Hi, I am Maeygia. Can you be my ninang/ninong?">
+          <span id="card-typed" aria-hidden="true">Hi, I am Maeygia. Can you be my ninang/ninong?</span>
+        </h2>
+        <div class="card__choices">
+          <button class="btn btn--primary" id="card-yes" type="button">Yes</button>
+          <button class="btn btn--ghost" id="card-no" type="button">No</button>
+        </div>
+        <p class="card__nudge" id="card-nudge" role="status" aria-live="polite"></p>
+      </div>
+    </div>
   </div>
 
   <script>
-    /* Safety net: if js/intro.js is blocked or fails to parse, the content below
-       the hero would stay hidden forever. Undo the intro's "curtain" in that case. */
+    /* Independent watchdog: restore access even if the intro fails midway. */
     window.setTimeout(function () {
-      if (!window.__christeningIntro) {
-        document.documentElement.classList.add('intro-failed');
-      }
-    }, 4000);
+      var envelope = document.getElementById('envelope');
+      if (!envelope || envelope.hidden) { return; }
+      envelope.hidden = true;
+      document.documentElement.classList.remove('intro-locked');
+      document.querySelectorAll('[data-intro-background]').forEach(function (element) {
+        element.inert = false;
+        element.removeAttribute('data-intro-background');
+      });
+      document.querySelector('.hero__name').focus();
+      document.dispatchEvent(new CustomEvent('christening:intro-complete'));
+    }, 20000);
   </script>
   <script src="/js/intro.js" defer></script>
   <script src="/js/main.js" defer></script>
