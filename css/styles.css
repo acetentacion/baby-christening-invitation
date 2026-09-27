@@ -183,7 +183,7 @@ a { color: var(--sage-deep); }
   --photo-size: clamp(9.5rem, 42vw, 12.5rem);
   width: var(--photo-size);
   height: var(--photo-size);
-  overflow: hidden;
+  overflow: visible;
   object-fit: cover;
   border-radius: 50%;
   background: var(--tint);
@@ -192,7 +192,7 @@ a { color: var(--sage-deep); }
     0 0 0 5.5px rgba(201, 169, 106, 0.55),
     0 16px 34px -16px rgba(58, 51, 48, 0.5);
 }
-.hero__photo { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.hero__photo { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
 .hero__photo--second { opacity: 0; }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -755,7 +755,7 @@ html.intro-locked body { overflow: hidden; }
   border-radius: 50%;
   margin: 0 auto 1.25rem;
   background: var(--blush);
-  overflow: hidden;
+  overflow: visible;
   box-shadow: 0 0 0 4px var(--blush);
 }
 .card__photo {
@@ -764,6 +764,28 @@ html.intro-locked body { overflow: hidden; }
   width: 100%;
   height: 100%;
   object-fit: cover;
+  border-radius: 50%;
+}
+.hero__portrait::before, .hero__portrait::after,
+.card__portrait::before, .card__portrait::after {
+  content: "";
+  position: absolute;
+  z-index: 2;
+  width: 54%;
+  height: 55%;
+  pointer-events: none;
+  background: url('/images/flower.svg') left bottom / 65% auto no-repeat,
+    url('/images/flower.svg') right top / 55% auto no-repeat;
+  transform-origin: 50% 85%;
+}
+.hero__portrait::before, .card__portrait::before { left: -28%; bottom: -2%; }
+.hero__portrait::after, .card__portrait::after { right: -28%; top: -8%; }
+@media (prefers-reduced-motion: no-preference) {
+  .hero__portrait::before, .hero__portrait::after,
+  .card__portrait::before, .card__portrait::after {
+    animation: flower-sway 9s ease-in-out infinite alternate;
+  }
+  .hero__portrait::after, .card__portrait::after { animation-delay: -4.5s; }
 }
 .card__photo--second { opacity: 0; }
 @media (prefers-reduced-motion: no-preference) {
@@ -794,11 +816,18 @@ html.intro-locked body { overflow: hidden; }
   width: clamp(65px, 13vw, 170px);
   opacity: 0.8;
   transform-origin: 50% 90%;
+  pointer-events: none;
 }
 .flower--top-left { top: -1.5rem; left: -1rem; }
 .flower--top-right { top: -2rem; right: -1rem; }
 .flower--corner-left { bottom: 2rem; left: -2rem; width: clamp(60px, 10vw, 130px); }
 .flower--corner-right { bottom: 2rem; right: -2rem; width: clamp(60px, 10vw, 130px); }
+.flower--top-small-left { top: -1rem; left: 14%; width: clamp(40px, 6vw, 80px); }
+.flower--top-small-right { top: -1rem; right: 14%; width: clamp(40px, 6vw, 80px); }
+.flower--side-left { top: 42%; left: -1.75rem; width: clamp(50px, 8vw, 105px); opacity: 0.5; }
+.flower--side-right { top: 42%; right: -1.75rem; width: clamp(50px, 8vw, 105px); opacity: 0.5; }
+.flower--footer-left { bottom: 0.5rem; left: 0; width: clamp(45px, 8vw, 110px); opacity: 0.55; }
+.flower--footer-right { bottom: 0.5rem; right: 0; width: clamp(45px, 8vw, 110px); opacity: 0.55; }
 @media (prefers-reduced-motion: no-preference) {
   .flower { animation: flower-sway 8s ease-in-out infinite alternate; }
   .flower--top-right, .flower--corner-left { animation-delay: -4s; }
