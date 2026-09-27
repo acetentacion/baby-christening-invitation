@@ -21,7 +21,38 @@
     initReveal();
     initPhoto();
     initMusic();
+    initBabySticker();
   });
+
+  function initBabySticker() {
+    var sticker = document.getElementById('baby-sticker');
+    if (!sticker) { return; }
+    var dismissed = false;
+    var close = sticker.querySelector('button');
+    var photo = sticker.querySelector('img');
+    function update() {
+      var atBottom = window.scrollY > 100 &&
+        window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 100;
+      sticker.hidden = dismissed || !atBottom ||
+        document.documentElement.classList.contains('intro-locked');
+    }
+    close.addEventListener('click', function () {
+      dismissed = true;
+      sticker.hidden = true;
+      var footer = document.querySelector('.footer');
+      if (footer) {
+        footer.setAttribute('tabindex', '-1');
+        footer.focus({ preventScroll: true });
+      }
+      window.removeEventListener('scroll', update);
+      window.removeEventListener('resize', update);
+    });
+    photo.addEventListener('error', function () { dismissed = true; update(); });
+    window.addEventListener('scroll', update, { passive: true });
+    window.addEventListener('resize', update);
+    document.addEventListener('christening:intro-complete', update);
+    update();
+  }
 
   function initMusic() {
     var music = new Audio('/music.wav');

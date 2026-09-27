@@ -619,6 +619,53 @@ a { color: var(--sage-deep); }
 .sticky-rsvp[hidden] { display: none; }
 .sticky-rsvp:active { transform: translateX(-50%) translateY(2px); }
 
+.baby-sticker {
+  position: fixed;
+  right: max(0.75rem, env(safe-area-inset-right));
+  bottom: calc(5.5rem + env(safe-area-inset-bottom, 0px));
+  z-index: 25;
+  width: clamp(115px, 20vw, 185px);
+  pointer-events: none;
+  transform-origin: bottom right;
+}
+.baby-sticker[hidden] { display: none; }
+.baby-sticker img { width: 100%; height: auto; filter: drop-shadow(0 5px 9px #88466726); }
+.baby-sticker__message {
+  margin-bottom: 0.35rem;
+  padding: 0.65rem;
+  border: 1px solid var(--blush);
+  border-radius: 16px 16px 3px 16px;
+  background: var(--bg);
+  color: var(--rose);
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-align: center;
+  box-shadow: var(--shadow);
+}
+.baby-sticker__close {
+  position: absolute;
+  top: -2.5rem;
+  right: 0;
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--blush);
+  border-radius: 50%;
+  background: var(--bg);
+  color: var(--rose);
+  font-size: 1.4rem;
+  cursor: pointer;
+  pointer-events: auto;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .baby-sticker { animation: sticker-peek 0.65s cubic-bezier(0.2, 0.7, 0.3, 1) both; }
+}
+@keyframes sticker-peek {
+  from { opacity: 0; transform: translate(50%, 30px) rotate(10deg); }
+  to { opacity: 1; transform: none; }
+}
+@media (min-width: 1024px) { .baby-sticker { bottom: 1rem; } }
+@media print { .baby-sticker { display: none !important; } }
+
 /* ----------------------------------------------------------------- Intro --- */
 html.intro-locked,
 html.intro-locked body { overflow: hidden; }
