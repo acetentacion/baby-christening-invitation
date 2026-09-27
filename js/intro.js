@@ -3,7 +3,7 @@
   'use strict';
   var LINE = 'Hi, I am Maeygia. Can you be my ninang/ninong?';
   var SAFETY_MS = 15000;
-  var OPEN_MS = 1100;
+  var OPEN_MS = 650;
   var envelope = document.getElementById('envelope');
   var yes = document.getElementById('card-yes');
   var no = document.getElementById('card-no');
@@ -23,6 +23,10 @@
   var speechTimer;
   var utterance;
   var spoken = false;
+  var revealTimer;
+  var readyTimer;
+  var ready = false;
+  var card = envelope.querySelector('.envelope__card');
 
   function stopSpeech() {
     window.clearTimeout(speechTimer);
@@ -45,7 +49,7 @@
     return voices.filter(function (item) { return item.localService; })[0] || voices[0];
   }
   function speak() {
-    if (spoken || opening || finished || !voice || !window.SpeechSynthesisUtterance) { return; }
+    if (!ready || spoken || opening || finished || !voice || !window.SpeechSynthesisUtterance) { return; }
     spoken = true;
     window.clearTimeout(speechTimer);
     try {
@@ -65,6 +69,8 @@
     finished = true;
     window.clearTimeout(safetyTimer);
     window.clearTimeout(openTimer);
+    window.clearTimeout(revealTimer);
+    window.clearTimeout(readyTimer);
     finishTyping();
     stopSpeech();
     if (voice && voice.removeEventListener) { voice.removeEventListener('voiceschanged', speak); }
@@ -92,11 +98,11 @@
     if (event.key === 'Escape') { event.preventDefault(); open(); }
     if (event.key === 'Tab') {
       event.preventDefault();
-      (document.activeElement === yes ? no : yes).focus();
+      if (ready) { (document.activeElement === yes ? no : yes).focus(); }
     }
   }
   function onFocus(event) {
-    if (!finished && !envelope.contains(event.target)) { yes.focus(); }
+    if (!finished && !envelope.contains(event.target)) { (ready ? yes : envelope).focus(); }
   }
   yes.addEventListener('click', open);
   no.addEventListener('click', function () {
@@ -124,19 +130,33 @@
   document.documentElement.classList.add('intro-locked');
   document.addEventListener('keydown', onKey);
   document.addEventListener('focusin', onFocus);
-  yes.focus();
-  if (!motion.matches) {
-    var count = 0;
-    typed.textContent = '';
-    typeTimer = window.setInterval(function () {
-      count += 1;
-      typed.textContent = LINE.slice(0, count);
-      if (count >= LINE.length) { finishTyping(); }
-    }, 55);
+  envelope.setAttribute('tabindex', '-1');
+  card.inert = true;
+  if (!motion.matches) { typed.textContent = ''; }
+  envelope.focus();
+  function revealCard() {
+    if (finished || opening) { return; }
+    envelope.classList.add('is-revealed');
+    readyTimer = window.setTimeout(startCard, motion.matches ? 0 : 1700);
   }
-  if (voice) {
-    if (voice.addEventListener) { voice.addEventListener('voiceschanged', speak); }
-    speechTimer = window.setTimeout(speak, 350);
+  function startCard() {
+    if (finished || opening) { return; }
+    ready = true;
+    card.inert = false;
+    yes.focus({ preventScroll: true });
+    if (!motion.matches) {
+      var count = 0;
+      typeTimer = window.setInterval(function () {
+        count += 1;
+        typed.textContent = LINE.slice(0, count);
+        if (count >= LINE.length) { finishTyping(); }
+      }, 55);
+    }
+    if (voice) {
+      if (voice.addEventListener) { voice.addEventListener('voiceschanged', speak); }
+      speechTimer = window.setTimeout(speak, 350);
+    }
   }
+  revealTimer = window.setTimeout(revealCard, motion.matches ? 0 : 700);
   window.addEventListener('pagehide', finish);
 }());

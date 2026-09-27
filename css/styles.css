@@ -218,6 +218,7 @@ a { color: var(--sage-deep); }
   font-size: clamp(2.35rem, 1.5rem + 5.2vw, 4.5rem);
   color: var(--ink);
 }
+.hero__name:focus { outline: none; }
 
 .hero__hosts {
   margin-top: 1rem;
@@ -618,6 +619,7 @@ html.intro-locked body { overflow: hidden; }
 
 /* Content remains available if JavaScript is disabled or fails to load. */
 .envelope[hidden] { display: none; }
+.envelope:focus { outline: none; }
 .envelope {
   position: fixed;
   inset: 0;
@@ -628,7 +630,7 @@ html.intro-locked body { overflow: hidden; }
   padding: 2rem 1.25rem;
   background: radial-gradient(ellipse at top, var(--blush), var(--bg) 70%);
   perspective: 1200px;
-  transition: opacity 0.35s ease 0.7s, visibility 0s linear 1.1s;
+  transition: opacity 0.6s ease, visibility 0s linear 0.6s;
 }
 .envelope__shell {
   position: relative;
@@ -636,10 +638,12 @@ html.intro-locked body { overflow: hidden; }
   margin: auto;
   isolation: isolate;
   perspective: 1000px;
+  padding-bottom: 3rem;
 }
 .envelope__back {
   position: absolute;
-  inset: 12% -0.35rem -0.35rem;
+  inset: auto 0 0;
+  height: 16rem;
   border: 1px solid var(--hairline);
   border-radius: var(--radius);
   background: #ead1c5;
@@ -649,34 +653,35 @@ html.intro-locked body { overflow: hidden; }
   position: absolute;
   z-index: 2;
   pointer-events: none;
-  backface-visibility: hidden;
-  transition: transform 0.7s ease;
+  transition: transform 1s cubic-bezier(0.4, 0, 0.2, 1);
 }
 .envelope__flap--top {
-  inset: 12% -0.35rem auto;
-  height: 40%;
-  background: #e4bdb0;
+  inset: auto 0 8rem;
+  height: 8rem;
+  z-index: 5;
+  background: linear-gradient(#dbad9e, #edc9bb);
   clip-path: polygon(0 0, 100% 0, 50% 100%);
   transform-origin: top center;
 }
 .envelope__flap--left,
 .envelope__flap--right {
-  bottom: -0.35rem;
-  width: 55%;
-  height: 65%;
-  background: #f0d5c9;
+  bottom: 0;
+  width: 100%;
+  height: 16rem;
+  z-index: 4;
+  background: linear-gradient(135deg, #f5ded2, #e6beac);
 }
 .envelope__flap--left {
-  left: -0.35rem;
+  left: 0;
   clip-path: polygon(0 0, 100% 100%, 0 100%);
   transform-origin: left center;
 }
 .envelope__flap--right {
-  right: -0.35rem;
+  right: 0;
   clip-path: polygon(100% 0, 100% 100%, 0 100%);
   transform-origin: right center;
 }
-/* The question sits above the flaps so both choices are always accessible. */
+/* Start tucked inside the envelope, then lift above the pocket. */
 .envelope__card {
   position: relative;
   z-index: 3;
@@ -687,7 +692,39 @@ html.intro-locked body { overflow: hidden; }
   background: var(--bg);
   text-align: center;
   box-shadow: var(--shadow);
-  transition: transform 0.7s ease, opacity 0.4s ease 0.4s;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(7rem) scale(0.88);
+  transition: transform 1s cubic-bezier(0.2, 0.7, 0.3, 1) 0.65s,
+    opacity 0.7s ease 0.65s, visibility 0s linear 0.65s;
+}
+.envelope__shell::after {
+  content: "M";
+  position: absolute;
+  z-index: 6;
+  bottom: 5.75rem;
+  left: calc(50% - 2rem);
+  display: grid;
+  place-items: center;
+  width: 4rem;
+  height: 4rem;
+  border: 3px double #f7e6bd;
+  border-radius: 50%;
+  background: #b38c50;
+  color: #fff9eb;
+  font: 1.6rem var(--font-display);
+  box-shadow: 0 5px 16px #70492c33;
+  transition: opacity 0.3s ease, transform 0.4s ease;
+}
+.envelope:not(.is-revealed) .envelope__shell { transform: translateY(-4rem); }
+.envelope__shell { transition: transform 1s ease; }
+.envelope.is-revealed .envelope__shell::after { opacity: 0; transform: scale(1.2); }
+.envelope.is-revealed .envelope__flap--top { transform: rotateX(180deg); z-index: 1; }
+.envelope.is-revealed .envelope__card {
+  z-index: 7;
+  opacity: 1;
+  visibility: visible;
+  transform: none;
 }
 .card__photo {
   width: clamp(6rem, 24vw, 9rem);
@@ -708,13 +745,15 @@ html.intro-locked body { overflow: hidden; }
 .card__choices .btn { min-width: 6rem; }
 .card__nudge { min-height: 3.2em; margin-top: 1rem; color: var(--rose); font-weight: 700; }
 .envelope.is-open { opacity: 0; visibility: hidden; }
-.envelope.is-open .envelope__flap--top { transform: rotateX(180deg); }
-.envelope.is-open .envelope__flap--left { transform: rotateY(-140deg); }
-.envelope.is-open .envelope__flap--right { transform: rotateY(140deg); }
-.envelope.is-open .envelope__card { transform: translateY(-2rem); opacity: 0; }
+.envelope.is-open .envelope__card {
+  transform: translateY(-2rem);
+  opacity: 0;
+  transition: transform 0.6s ease, opacity 0.6s ease;
+}
 
 @media (prefers-reduced-motion: reduce) {
-  .envelope, .envelope__card, .envelope__flap { transition: none; }
+  .envelope, .envelope__card, .envelope__flap,
+  .envelope__shell, .envelope__shell::after { transition: none; }
   .envelope.is-open .envelope__card { transform: none; }
 }
 
