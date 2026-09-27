@@ -847,7 +847,10 @@ html.intro-locked body { overflow: hidden; }
   padding: 0;
   list-style: none;
 }
-.gift-guide__list li {
+.gift-guide__list a {
+  display: block;
+  height: 100%;
+  text-decoration: none;
   padding: 0.85rem 0.5rem;
   border-radius: var(--radius-sm);
   background: var(--tint);
@@ -855,6 +858,14 @@ html.intro-locked body { overflow: hidden; }
 }
 .gift-guide__list strong { display: block; color: var(--rose); }
 .gift-guide__list span { display: block; font-size: 0.875rem; color: var(--ink-soft); }
+.gift-guide__list a:hover { background: var(--blush); }
+.gift-guide__list .gift-guide__shop {
+  margin-top: 0.5rem;
+  color: var(--rose);
+  font-size: 0.75rem;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
 .dress-code p { margin-top: 0.75rem; color: var(--ink-soft); }
 .dress-code__colors {
   display: flex;
