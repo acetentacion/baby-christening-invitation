@@ -34,6 +34,18 @@
     if (!img) { wrap.remove(); return; }
     // No photo supplied yet: drop the frame instead of showing a broken image.
     img.addEventListener('error', function () { wrap.hidden = true; });
+    var photos = wrap.querySelectorAll('img');
+    function startPhotos() {
+      if (document.documentElement.classList.contains('intro-locked')) { return; }
+      if (Array.prototype.every.call(photos, function (photo) {
+        return photo.complete && photo.naturalWidth > 0;
+      })) { wrap.classList.add('is-portrait-ready'); }
+    }
+    Array.prototype.forEach.call(photos, function (photo) {
+      photo.addEventListener('load', startPhotos, { once: true });
+    });
+    document.addEventListener('christening:intro-complete', startPhotos);
+    startPhotos();
   }
 
   /* ------------------------------------------------------- form + gate --- */

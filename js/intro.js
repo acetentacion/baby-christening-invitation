@@ -11,7 +11,6 @@
   var nudge = document.getElementById('card-nudge');
   var heading = document.querySelector('.hero__name');
   var openButton = document.getElementById('envelope-open');
-  var photoToggle = document.getElementById('photo-toggle');
   if (!envelope || !yes || !no || !typed || !nudge || !heading || !openButton) { return; }
   var motion = window.matchMedia('(prefers-reduced-motion: reduce)');
   var voice = window.speechSynthesis;
@@ -100,7 +99,7 @@
     if (event.key === 'Tab') {
       event.preventDefault();
       if (ready) {
-        var controls = photoToggle && !photoToggle.hidden && !motion.matches ? [photoToggle, yes, no] : [yes, no];
+        var controls = [yes, no];
         var current = controls.indexOf(document.activeElement);
         controls[(current + (event.shiftKey ? controls.length - 1 : 1)) % controls.length].focus();
       }
@@ -164,7 +163,6 @@
         return photo.complete && photo.naturalWidth > 0;
       })) {
         envelope.classList.add('is-portrait-ready');
-        if (photoToggle) { photoToggle.hidden = motion.matches; }
       }
     }
     Array.prototype.forEach.call(portraits, function (photo) {
@@ -186,12 +184,5 @@
     }
   }
   openButton.addEventListener('click', revealCard);
-  if (photoToggle) {
-    photoToggle.addEventListener('click', function () {
-      var paused = envelope.classList.toggle('is-photo-paused');
-      photoToggle.setAttribute('aria-pressed', String(paused));
-      photoToggle.textContent = paused ? 'Resume photos' : 'Pause photos';
-    });
-  }
   window.addEventListener('pagehide', finish);
 }());

@@ -29,7 +29,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600&amp;family=Nunito:wght@400;600;700&amp;display=swap">
-  <link rel="stylesheet" href="/css/styles.css?v=20260927-pink">
+  <link rel="stylesheet" href="/css/styles.css?v=20260927-flowers">
 
 </head>
 
@@ -38,6 +38,10 @@
 
   <header class="hero">
     <div class="hero__art" aria-hidden="true">
+      <img class="flower flower--top-left" src="/images/flower.svg" alt="">
+      <img class="flower flower--top-right" src="/images/flower.svg" alt="">
+      <img class="flower flower--corner-left" src="/images/flower.svg" alt="">
+      <img class="flower flower--corner-right" src="/images/flower.svg" alt="">
       <svg class="hero__blob" viewBox="0 0 200 200" role="presentation">
         <path fill="currentColor" d="M45.5,-59.5C56.6,-49.6,64.1,-35.1,66.8,-19.4C69.5,-3.7,67.4,13.2,59.7,26.4C52,39.6,38.7,49.1,25.2,55.3C11.7,61.5,-2,64.4,-12.9,58.6C-23.8,52.8,-31.9,38.3,-35.4,23.5C-38.9,8.7,-37.8,-6.4,-30.2,-19.3C-22.6,-32.2,-8.5,-42.9,5.6,-53.6C19.7,-64.3,34.4,-69.4,45.5,-59.5Z" transform="translate(100 100)"/>
       </svg>
@@ -58,13 +62,17 @@
 
     <div class="hero__inner">
       <div class="hero__photo-wrap" data-photo>
-        <img class="hero__photo"
+        <div class="hero__portrait" role="img" aria-label="Maeygia Eikana A. Pojadas smiling">
+        <img class="hero__photo hero__photo--first"
              src="/images/baby.png"
-             alt="Maeygia Eikana A. Pojadas"
+             alt=""
              width="200"
              height="200"
              decoding="async"
              fetchpriority="high">
+        <img class="hero__photo hero__photo--second" src="/images/baby1.png"
+             alt="" width="200" height="200" decoding="async">
+        </div>
       </div>
 
       <p class="hero__eyebrow">Together with our families, we joyfully announce the christening of</p>
@@ -270,7 +278,6 @@
           <img class="card__photo card__photo--second" src="/images/baby1.png"
                alt="" width="200" height="200" decoding="async">
         </div>
-        <button class="photo-toggle" id="photo-toggle" type="button" aria-pressed="false" hidden>Pause photos</button>
         <p class="card__eyebrow">A little invitation, just for you</p>
         <h2 class="card__message" id="card-message"
             aria-label="Hi, I am Maeygia. Can you be my ninang/ninong?">
@@ -285,7 +292,7 @@
     </div>
   </div>
 
-  <script src="/js/intro.js?v=20260927-pink" defer></script>
-  <script src="/js/main.js?v=20260927-pink" defer></script>
+  <script src="/js/intro.js?v=20260927-flowers" defer></script>
+  <script src="/js/main.js?v=20260927-flowers" defer></script>
 </body>
 </html>

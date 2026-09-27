@@ -178,10 +178,12 @@ a { color: var(--sage-deep); }
   margin-bottom: clamp(1.25rem, 3vw, 1.9rem);
 }
 
-.hero__photo {
+.hero__portrait {
+  position: relative;
   --photo-size: clamp(9.5rem, 42vw, 12.5rem);
   width: var(--photo-size);
   height: var(--photo-size);
+  overflow: hidden;
   object-fit: cover;
   border-radius: 50%;
   background: var(--tint);
@@ -190,9 +192,13 @@ a { color: var(--sage-deep); }
     0 0 0 5.5px rgba(201, 169, 106, 0.55),
     0 16px 34px -16px rgba(58, 51, 48, 0.5);
 }
+.hero__photo { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.hero__photo--second { opacity: 0; }
 
 @media (prefers-reduced-motion: no-preference) {
-  .hero__photo { animation: photo-in 0.9s cubic-bezier(0.2, 0.7, 0.3, 1) both; }
+  .is-portrait-ready .hero__portrait { animation: photo-in 0.9s ease both; }
+  .is-portrait-ready .hero__photo--first { animation: expression-first 10s ease infinite; }
+  .is-portrait-ready .hero__photo--second { animation: expression-second 10s ease infinite; }
 }
 
 @keyframes photo-in {
@@ -201,7 +207,7 @@ a { color: var(--sage-deep); }
 }
 
 @media print {
-  .hero__photo {
+  .hero__portrait {
     --photo-size: 1.6in;
     box-shadow: 0 0 0 3px #999;
   }
@@ -783,23 +789,24 @@ html.intro-locked body { overflow: hidden; }
   0%, 40%, 100% { opacity: 0; }
   50%, 90% { opacity: 1; }
 }
-.envelope.is-photo-paused .card__portrait,
-.envelope.is-photo-paused .card__photo { animation-play-state: paused; }
-.photo-toggle {
-  display: block;
-  margin: -0.5rem auto 1rem;
-  padding: 0.4rem 0.75rem;
-  min-height: 44px;
-  border: 0;
-  border-radius: 999px;
-  background: var(--tint);
-  color: var(--rose);
-  font: inherit;
-  font-size: 0.8rem;
-  cursor: pointer;
+.flower {
+  position: absolute;
+  width: clamp(65px, 13vw, 170px);
+  opacity: 0.8;
+  transform-origin: 50% 90%;
 }
-.photo-toggle[hidden] { display: none; }
-@media (prefers-reduced-motion: reduce) { .photo-toggle { display: none; } }
+.flower--top-left { top: -1.5rem; left: -1rem; }
+.flower--top-right { top: -2rem; right: -1rem; }
+.flower--corner-left { bottom: 2rem; left: -2rem; width: clamp(60px, 10vw, 130px); }
+.flower--corner-right { bottom: 2rem; right: -2rem; width: clamp(60px, 10vw, 130px); }
+@media (prefers-reduced-motion: no-preference) {
+  .flower { animation: flower-sway 8s ease-in-out infinite alternate; }
+  .flower--top-right, .flower--corner-left { animation-delay: -4s; }
+}
+@keyframes flower-sway {
+  from { transform: rotate(-7deg) translateY(0); }
+  to { transform: rotate(7deg) translateY(-4px); }
+}
 .dress-code { margin-top: 1.75rem; text-align: center; }
 .dress-code p { margin-top: 0.75rem; color: var(--ink-soft); }
 .dress-code__colors {
