@@ -179,12 +179,16 @@ a { color: var(--sage-deep); }
     0 16px 34px -16px rgba(58, 51, 48, 0.5);
 }
 .hero__photo { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
-.hero__photo--second { opacity: 0; }
+.hero__photo--second,
+.hero__photo--third,
+.hero__photo--fourth { opacity: 0; }
 
 @media (prefers-reduced-motion: no-preference) {
   .is-portrait-ready .hero__portrait { animation: photo-in 0.9s ease both; }
-  .is-portrait-ready .hero__photo--first { animation: expression-first 10s ease infinite; }
-  .is-portrait-ready .hero__photo--second { animation: expression-second 10s ease infinite; }
+  .is-portrait-ready .hero__photo--first { animation: expression-first 16s ease infinite; }
+  .is-portrait-ready .hero__photo--second { animation: expression-second 16s ease infinite; }
+  .is-portrait-ready .hero__photo--third { animation: expression-third 16s ease infinite; }
+  .is-portrait-ready .hero__photo--fourth { animation: expression-fourth 16s ease infinite; }
 }
 
 @keyframes photo-in {
@@ -860,16 +864,24 @@ html.intro-locked body { overflow: hidden; }
   }
   .hero__portrait::after, .card__portrait::after { animation-delay: -4.5s; }
 }
-.card__photo--second { opacity: 0; }
+.card__photo--second,
+.card__photo--third,
+.card__photo--fourth { opacity: 0; }
 @media (prefers-reduced-motion: no-preference) {
   .envelope.is-portrait-ready .card__portrait {
-    animation: portrait-lift 10s ease-in-out infinite;
+    animation: portrait-lift 16s ease-in-out infinite;
   }
   .envelope.is-portrait-ready .card__photo--first {
-    animation: expression-first 10s ease infinite;
+    animation: expression-first 16s ease infinite;
   }
   .envelope.is-portrait-ready .card__photo--second {
-    animation: expression-second 10s ease infinite;
+    animation: expression-second 16s ease infinite;
+  }
+  .envelope.is-portrait-ready .card__photo--third {
+    animation: expression-third 16s ease infinite;
+  }
+  .envelope.is-portrait-ready .card__photo--fourth {
+    animation: expression-fourth 16s ease infinite;
   }
 }
 @keyframes portrait-lift {
@@ -877,12 +889,24 @@ html.intro-locked body { overflow: hidden; }
   50% { transform: translateY(-5px) rotate(2deg); }
 }
 @keyframes expression-first {
-  0%, 40%, 100% { opacity: 1; }
-  50%, 90% { opacity: 0; }
+  0%, 20%   { opacity: 1; }
+  25%, 95%  { opacity: 0; }
+  100%      { opacity: 1; }
 }
 @keyframes expression-second {
-  0%, 40%, 100% { opacity: 0; }
-  50%, 90% { opacity: 1; }
+  0%, 20%   { opacity: 0; }
+  25%, 45%  { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+@keyframes expression-third {
+  0%, 45%   { opacity: 0; }
+  50%, 70%  { opacity: 1; }
+  75%, 100% { opacity: 0; }
+}
+@keyframes expression-fourth {
+  0%, 70%   { opacity: 0; }
+  75%, 95%  { opacity: 1; }
+  100%      { opacity: 0; }
 }
 .flower {
   position: absolute;
