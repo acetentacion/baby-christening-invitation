@@ -15,7 +15,7 @@
   var voice = new Audio('/voice.mp3');
   voice.preload = 'auto';
   var background = [];
-  var declined = false;
+  var declined = 0;
   var opening = false;
   var finished = false;
   var typeTimer;
@@ -79,6 +79,24 @@
     if (motion.matches) { finish(); }
     else { openTimer = window.setTimeout(finish, OPEN_MS); }
   }
+  function resetEnvelope() {
+    window.clearTimeout(safetyTimer);
+    window.clearTimeout(readyTimer);
+    finishTyping();
+    stopSpeech();
+    spoken = false;
+    declined = 0;
+    ready = false;
+    revealing = false;
+    card.inert = true;
+    envelope.removeAttribute('aria-labelledby');
+    envelope.classList.remove('is-revealed', 'is-portrait-ready');
+    openButton.hidden = false;
+    no.textContent = 'No';
+    nudge.textContent = '';
+    if (!motion.matches) { typed.textContent = ''; }
+    openButton.focus({ preventScroll: true });
+  }
   function onKey(event) {
     if (event.key === 'Escape') { event.preventDefault(); open(); }
     if (event.key === 'Tab') {
@@ -99,11 +117,11 @@
   yes.addEventListener('click', open);
   no.addEventListener('click', function () {
     if (opening || finished) { return; }
-    if (declined) { open(); return; }
-    declined = true;
+    declined += 1;
+    if (declined >= 3) { resetEnvelope(); return; }
     finishTyping();
-    nudge.textContent = 'Are you sure? Please say yes!';
-    no.textContent = 'Still no';
+    nudge.textContent = declined === 1 ? 'Are you sure? Please say yes!' : 'One last chance!';
+    no.textContent = declined === 1 ? 'Still no' : 'No, really';
     stopSpeech();
     spoken = false;
     speak();
